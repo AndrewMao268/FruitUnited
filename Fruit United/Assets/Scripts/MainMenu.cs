@@ -25,7 +25,7 @@ public class MainMenu : MonoBehaviour
     void ShowSettingsMenu()
     {
         // Toggle the visibility of the settings menu
-        settingsMenu.SetActive(!settingsMenu.activeSelf);
+        settingsMenu.SetActive(true);
     }
    public void StartGame()
    {
