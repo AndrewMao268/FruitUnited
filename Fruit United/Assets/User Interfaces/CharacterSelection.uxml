@@ -1,0 +1,12 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:VisualElement style="flex-grow: 1; height: 0;">
+        <engine:Label text="Choose your character" style="color: rgb(255, 255, 255); font-size: 30px; -unity-text-align: upper-center;" />
+    </engine:VisualElement>
+    <engine:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: space-around; align-items: center;">
+        <engine:Button text="Mango" name="MangoButton" style="width: 15%; height: 50%; font-size: 20px;" />
+        <engine:Button text="Banana" name="BananaButton" style="width: 15%; height: 50%; font-size: 20px;" />
+        <engine:Button text="Pomegranate" name="PomegranateButton" enable-rich-text="false" style="width: 15%; height: 50%; font-size: 20px;" />
+        <engine:Button text="Watermelon" name="WatermelonButton" style="width: 15%; height: 50%; font-size: 20px;" />
+        <engine:Button text="Grape" name="GrapeButton" style="width: 15%; height: 50%; font-size: 20px;" />
+    </engine:VisualElement>
+</engine:UXML>
