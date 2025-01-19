@@ -12,7 +12,10 @@ EditorBuildSettings:
     path: Assets/Scenes/First Cutscene.unity
     guid: 696c9bb1e91088746b78a1eb4f09315f
   - enabled: 1
-    path: Assets/Scenes/Starting Scene.unity
+    path: Assets/Scenes/CharacterSelection.unity
+    guid: 103d13f0ccffbdb4ab06231d6be6c3a5
+  - enabled: 1
+    path: Assets/Scenes/Level001.unity
     guid: 8a0adb1dbbb9f5645827496313cf6c24
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Mango_0: -3968840770022985357
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

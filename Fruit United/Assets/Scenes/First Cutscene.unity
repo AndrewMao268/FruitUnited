@@ -755,7 +755,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1937074161}
           m_TargetAssemblyTypeName: TileScroller, Assembly-CSharp
-          m_MethodName: BrolandTimes
+          m_MethodName: ChangeScene
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -880,7 +880,7 @@ GameObject:
   - component: {fileID: 1937074162}
   - component: {fileID: 1937074161}
   m_Layer: 0
-  m_Name: broland
+  m_Name: SceneChanger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

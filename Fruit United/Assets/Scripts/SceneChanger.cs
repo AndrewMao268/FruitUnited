@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 public class TileScroller : MonoBehaviour
 {
 
-    public void BrolandTimes() {
-        SceneManager.LoadScene("Starting Scene");
+    public void ChangeScene() {
+        SceneManager.LoadScene("CharacterSelection");
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
