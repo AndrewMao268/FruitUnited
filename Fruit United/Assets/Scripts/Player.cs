@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
     }
 
     void OnCollisionEnter2D(Collision2D collision2D) {
-        if (collision2D.gameObject.name == "TilemapGround")
+        if (collision2D.gameObject.name == "TilemapGround" || collision2D.gameObject.name == "Soldier(Clone)")
         {
             grounded = true;
         }
@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D collision2D)
     {
-        if (collision2D.gameObject.name == "TilemapGround")
+        if (collision2D.gameObject.name == "TilemapGround" || collision2D.gameObject.name == "Soldier(Clone)")
         {
             grounded = false;
         }

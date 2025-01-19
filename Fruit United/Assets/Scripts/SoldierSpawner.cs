@@ -5,7 +5,7 @@ public class SoldierSpawner : MonoBehaviour {
     void Start() {
         soldier = GameObject.Find("Soldier");
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 9; i++) {
             Instantiate(soldier);
         }
     }
