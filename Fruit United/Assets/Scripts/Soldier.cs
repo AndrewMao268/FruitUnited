@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Soldier : MonoBehaviour
@@ -25,6 +26,11 @@ public class Soldier : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+
+        if (player.transform.position.y < -20.0f) {
+            player.transform.position = new Vector2(0.0f, 4.0f);
+        }
+
         // Soldier AI
         float moveX = player.transform.position.x - transform.position.x;
         float moveY = player.transform.position.y - transform.position.y;
