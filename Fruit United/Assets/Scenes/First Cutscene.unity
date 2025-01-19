@@ -671,6 +671,8 @@ PlayableDirector:
     value: {fileID: 945436601}
   - key: {fileID: -2852270156242226374, guid: 96ccff28d08ccf84da22cc6081d14eeb, type: 2}
     value: {fileID: 87984403}
+  - key: {fileID: 2326406542517220780, guid: 96ccff28d08ccf84da22cc6081d14eeb, type: 2}
+    value: {fileID: 1937074160}
   m_ExposedReferences:
     m_References: []
 --- !u!4 &1116877647
@@ -793,6 +795,50 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &1937074160
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1937074162}
+  - component: {fileID: 1937074161}
+  m_Layer: 0
+  m_Name: broland
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1937074161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937074160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dbe45303d9829447a46ea41163002e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1937074162
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937074160}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.0061431, y: 0.29431385, z: 0.035386067}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2146055736
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,3 +925,4 @@ SceneRoots:
   - {fileID: 624549232}
   - {fileID: 1116877647}
   - {fileID: 2146055739}
+  - {fileID: 1937074162}
