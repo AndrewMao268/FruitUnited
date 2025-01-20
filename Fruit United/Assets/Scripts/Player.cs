@@ -2,6 +2,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using UnityEngine.SceneManagement;
+
 
 public class Player : MonoBehaviour
 {
@@ -14,6 +16,7 @@ public class Player : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
         rb = GetComponent<Rigidbody2D>();
         grounded = false;
     }
@@ -34,15 +37,24 @@ public class Player : MonoBehaviour
     }
 
     void OnCollisionEnter2D(Collision2D collision2D) {
-        if (collision2D.gameObject.name == "TilemapGround" || collision2D.gameObject.name == "Soldier(Clone)")
+        if (collision2D.gameObject.name == "TilemapGround")
         {
             grounded = true;
+        }
+
+        if (collision2D.gameObject.name == "Soldier(Clone)") {
+            transform.position = new Vector2(0.0f, 4.0f);
+        }
+
+        if (collision2D.gameObject.name == "Portal") {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            transform.position = new Vector2(0.0f, 4.0f);
         }
     }
 
     void OnCollisionExit2D(Collision2D collision2D)
     {
-        if (collision2D.gameObject.name == "TilemapGround" || collision2D.gameObject.name == "Soldier(Clone)")
+        if (collision2D.gameObject.name == "TilemapGround")
         {
             grounded = false;
         }

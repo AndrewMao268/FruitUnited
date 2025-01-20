@@ -1,12 +1,13 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Styles/CharacterSelection.uss?fileID=7433441132597879392&amp;guid=b8a5cf196687a0248b76be3239b704f1&amp;type=3#CharacterSelection" />
     <engine:VisualElement style="flex-grow: 1; height: 0;">
         <engine:Label text="Choose your character" style="color: rgb(255, 255, 255); font-size: 30px; -unity-text-align: upper-center;" />
     </engine:VisualElement>
     <engine:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: space-around; align-items: center;">
-        <engine:Button text="Mango" name="MangoButton" style="width: 15%; height: 50%; font-size: 20px;" />
-        <engine:Button text="Banana" name="BananaButton" style="width: 15%; height: 50%; font-size: 20px;" />
-        <engine:Button text="Pomegranate" name="PomegranateButton" enable-rich-text="false" style="width: 15%; height: 50%; font-size: 20px;" />
-        <engine:Button text="Watermelon" name="WatermelonButton" style="width: 15%; height: 50%; font-size: 20px;" />
-        <engine:Button text="Grape" name="GrapeButton" style="width: 15%; height: 50%; font-size: 20px;" />
+        <engine:VisualElement name="MangoButton" class="cardContainer" style="flex-grow: 1;" />
+        <engine:VisualElement name="BananaButton" class="cardContainer" style="flex-grow: 1;" />
+        <engine:VisualElement name="PomegranateButton" class="cardContainer" style="flex-grow: 1;" />
+        <engine:VisualElement name="WatermelonButton" class="cardContainer" style="flex-grow: 1;" />
+        <engine:VisualElement name="GrapeButton" class="cardContainer" style="flex-grow: 1;" />
     </engine:VisualElement>
 </engine:UXML>

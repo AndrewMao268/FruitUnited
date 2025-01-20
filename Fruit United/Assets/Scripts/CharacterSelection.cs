@@ -1,19 +1,27 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class CharacterSelection : MonoBehaviour
 {
-    private void OnEnable() {
-        UIDocument uiDocument = GetComponent<UIDocument>();
-        uiDocument.rootVisualElement.Q("MangoButton").RegisterCallback<ClickEvent>(ChangeScene);
-        uiDocument.rootVisualElement.Q("BananaButton").RegisterCallback<ClickEvent>(ChangeScene);
-        uiDocument.rootVisualElement.Q("PomegranateButton").RegisterCallback<ClickEvent>(ChangeScene);
-        uiDocument.rootVisualElement.Q("WatermelonButton").RegisterCallback<ClickEvent>(ChangeScene);
-        uiDocument.rootVisualElement.Q("GrapeButton").RegisterCallback<ClickEvent>(ChangeScene);
+    public Button mangoContainer;
+    public Button bananaContainer;
+    public Button pomegranateContainer;
+    public Button watermelonContainer;
+    public Button grapeContainer;
+
+    void Start() {
+        mangoContainer.onClick.AddListener(ChangeScene);
+        bananaContainer.onClick.AddListener(ChangeScene);
+        pomegranateContainer.onClick.AddListener(ChangeScene);
+        watermelonContainer.onClick.AddListener(ChangeScene);
+        grapeContainer.onClick.AddListener(ChangeScene);
     }
 
-    private void ChangeScene(ClickEvent evt) {
+    private void OnEnable() {
+    }
+
+    private void ChangeScene() {
         SceneManager.LoadScene("Level001");
     }
 }

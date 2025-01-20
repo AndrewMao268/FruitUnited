@@ -3,17 +3,20 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 
-public class CameraMan : MonoBehaviour {
+public class Background : MonoBehaviour
+{
 
     public GameObject followObject;
 
-    void Start() {
+    void Start()
+    {
         DontDestroyOnLoad(gameObject);
     }
 
-    void Update() {
+    void Update()
+    {
         float followX = followObject.transform.position.x;
         float followY = followObject.transform.position.y;
-        transform.position = new Vector3(followX, followY, -10.0f);
+        transform.position = new Vector3(followX, followY, 0.0f);
     }
 }

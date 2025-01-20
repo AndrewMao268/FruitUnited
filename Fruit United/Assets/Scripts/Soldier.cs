@@ -20,7 +20,7 @@ public class Soldier : MonoBehaviour
         player = GameObject.Find("Player");
 
         System.Random random = new System.Random();
-        transform.position = new Vector2(random.Next(-100, 100) / 10.0f, 5.0f);
+        transform.position = new Vector2(random.Next(950, 2300) / 10.0f, 5.0f);
     }
 
     // Update is called once per frame
@@ -48,13 +48,15 @@ public class Soldier : MonoBehaviour
         moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Math.Abs(moveValue.x);
         moveValue.y = moveValue.y == 0.0f ? 0.0f : moveValue.y / Math.Abs(moveValue.y);
 
-        if (moveValue.y > 0.0f && grounded)
-        {
-            rb.AddForce(new Vector2(0.0f, jumpHeight), ForceMode2D.Impulse);
-            return;
-        }
+        // if (moveValue.y > 0.0f && grounded)
+        // {
+        //     rb.AddForce(new Vector2(0.0f, jumpHeight), ForceMode2D.Impulse);
+        //     return;
+        // }
 
-        rb.AddForce(new Vector2(moveValue.x * xSpeed, 0.0f), ForceMode2D.Force);
+        // rb.AddForce(new Vector2(moveValue.x * xSpeed, 0.0f), ForceMode2D.Force);
+
+        transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0.0f);
     }
 
     void OnCollisionEnter2D(Collision2D collision2D)
