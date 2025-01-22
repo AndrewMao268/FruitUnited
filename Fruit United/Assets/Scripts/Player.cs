@@ -45,8 +45,8 @@ public class Player : MonoBehaviour
             grounded = true;
         }
 
-        // Commit for Brandon
-        if (collision2D.gameObject.name == "Soldier(Clone)") {
+        // A special commit from Brandon
+        if (collision2D.gameObject.name == "Soldier(Clone)" || collision2D.gameObject.name == "Soldier") {
             transform.position = new Vector2(0.0f, 4.0f);
         }
 
