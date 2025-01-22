@@ -10,31 +10,52 @@ public class Player : MonoBehaviour
 {
 
     Rigidbody2D rb;
-    BoxCollider2D boxCollider;
     bool grounded;
     public float jumpHeight = 4.0f;
     public float xSpeed = 7.0f;
 
+    public Transform feet;
+    public LayerMask groundLayer;
+
+    private float pressingHorizontal = 0.0f;
+    private float pressingVertical = 0.0f;
+
+    public float sizeScale = 0.2f;
+    public float capsuleX = 1.5f;
+    public float capsuleY = 0.5f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         DontDestroyOnLoad(gameObject);
         rb = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
         grounded = false;
+    }
+
+    private void Update()
+    {
+        if (pressingHorizontal >= 0.0f)
+            transform.localScale = new Vector2(-sizeScale, sizeScale);
+        else
+            transform.localScale = new Vector2(sizeScale, sizeScale);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         // check if feet box is touching the tilemap
-        grounded = boxCollider.IsTouching(GameObject.Find("TilemapGround").gameObject.GetComponent<TilemapCollider2D>());
+        // grounded = transform.Find("Feet").gameObject.GetComponent<BoxCollider2D>().IsTouching(GameObject.Find("TilemapGround").gameObject.GetComponent<TilemapCollider2D>());
+        grounded = Physics2D.OverlapCapsule(feet.position, new Vector2(capsuleX, capsuleY), CapsuleDirection2D.Horizontal, 0, groundLayer);
+        Debug.Log(grounded);
+
+        // -0.255483, -2.785763
+        // 1.827254, 0.8648027
+
 
         // Moving
         Vector2 moveValue = InputSystem.actions.FindAction("Move").ReadValue<Vector2>();
-        moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Math.Abs(moveValue.x);
-        moveValue.y = moveValue.y == 0.0f ? 0.0f : moveValue.y / Math.Abs(moveValue.y);
+        pressingHorizontal = moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Math.Abs(moveValue.x);
+        pressingVertical = moveValue.y = moveValue.y == 0.0f ? 0.0f : moveValue.y / Math.Abs(moveValue.y);
 
         // Moving Y
         if (moveValue.y == 1.0f && grounded) {
@@ -48,21 +69,13 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision2D) {
         // A special commit from Brandon
-        if (collision2D.gameObject.name == "Soldier(Clone)" || collision2D.gameObject.name == "Soldier") {
-            transform.position = new Vector2(0.0f, 4.0f);
-        }
+        //if (collision2D.gameObject.name == "Soldier(Clone)" || collision2D.gameObject.name == "Soldier") {
+        //    transform.position = new Vector2(0.0f, 4.0f);
+        //}
 
         if (collision2D.gameObject.name == "Portal") {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             transform.position = new Vector2(0.0f, 4.0f);
         }
-    }
-
-    void OnCollisionExit2D(Collision2D collision2D)
-    {
-        //if (collision2D.gameObject.name == "TilemapGround")
-        //{
-        //    grounded = false;
-        //}
     }
 }
