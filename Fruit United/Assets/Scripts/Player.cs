@@ -24,15 +24,18 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        // Moving
         Vector2 moveValue = InputSystem.actions.FindAction("Move").ReadValue<Vector2>();
         moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Math.Abs(moveValue.x);
         moveValue.y = moveValue.y == 0.0f ? 0.0f : moveValue.y / Math.Abs(moveValue.y);
 
+        // Moving Y
         if (moveValue.y == 1.0f && grounded) {
             rb.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
             return;
         }
 
+        // Moving X
         rb.AddForce(new Vector2(moveValue.x * xSpeed, 0.0f), ForceMode2D.Force);
     }
 
@@ -42,6 +45,7 @@ public class Player : MonoBehaviour
             grounded = true;
         }
 
+        // Commit for Brandon
         if (collision2D.gameObject.name == "Soldier(Clone)") {
             transform.position = new Vector2(0.0f, 4.0f);
         }
