@@ -3,27 +3,34 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 
 public class Player : MonoBehaviour
 {
 
     Rigidbody2D rb;
+    BoxCollider2D boxCollider;
     bool grounded;
     public float jumpHeight = 4.0f;
     public float xSpeed = 7.0f;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         DontDestroyOnLoad(gameObject);
         rb = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
         grounded = false;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        // check if feet box is touching the tilemap
+        grounded = boxCollider.IsTouching(GameObject.Find("TilemapGround").gameObject.GetComponent<TilemapCollider2D>());
+
         // Moving
         Vector2 moveValue = InputSystem.actions.FindAction("Move").ReadValue<Vector2>();
         moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Math.Abs(moveValue.x);
@@ -40,11 +47,6 @@ public class Player : MonoBehaviour
     }
 
     void OnCollisionEnter2D(Collision2D collision2D) {
-        if (collision2D.gameObject.name == "TilemapGround")
-        {
-            grounded = true;
-        }
-
         // A special commit from Brandon
         if (collision2D.gameObject.name == "Soldier(Clone)" || collision2D.gameObject.name == "Soldier") {
             transform.position = new Vector2(0.0f, 4.0f);
@@ -58,9 +60,9 @@ public class Player : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D collision2D)
     {
-        if (collision2D.gameObject.name == "TilemapGround")
-        {
-            grounded = false;
-        }
+        //if (collision2D.gameObject.name == "TilemapGround")
+        //{
+        //    grounded = false;
+        //}
     }
 }
