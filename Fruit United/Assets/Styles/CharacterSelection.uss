@@ -1,0 +1,7 @@
+VisualElement {
+
+}
+
+.cardContainer {
+    background-image: url("Assets/Images/Banana.png");
+}
