@@ -56,6 +56,17 @@ public class Player : MonoBehaviour
         Vector2 moveValue = InputSystem.actions.FindAction("Move").ReadValue<Vector2>();
         pressingHorizontal = moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Math.Abs(moveValue.x);
         pressingVertical = moveValue.y = moveValue.y == 0.0f ? 0.0f : moveValue.y / Math.Abs(moveValue.y);
+<<<<<<< Updated upstream
+=======
+
+        animator.SetFloat("changeSpeed", Mathf.Abs(moveValue.x));
+        
+       
+
+
+
+
+>>>>>>> Stashed changes
 
         // Moving Y
         if (moveValue.y == 1.0f && grounded) {
@@ -79,3 +90,23 @@ public class Player : MonoBehaviour
         }
     }
 }
+
+
+
+
+
+// OLD ANIMATION SCRIPT THAT FAILED. SAVED IF NEEDED
+/* if (moveValue.x != 0 || moveValue.y != 0)
+        {
+            animator.SetFloat("X", moveValue.x);
+            animator.SetFloat("Y", moveValue.y);
+
+            animator.SetBool("IsWalking", true);
+            spriteRenderer.sprite = spriteTest;
+             
+        } else
+        {
+            animator.SetBool("IsWalking", false);
+            spriteRenderer.sprite = spriteTest;
+        }
+        */
