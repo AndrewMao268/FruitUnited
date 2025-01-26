@@ -22,6 +22,6 @@ public class CharacterSelection : MonoBehaviour
     }
 
     private void ChangeScene() {
-        SceneManager.LoadScene("Level001");
+        SceneManager.LoadScene("NameInput");
     }
 }
