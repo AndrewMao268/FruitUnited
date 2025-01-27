@@ -747,7 +747,7 @@ GameObject:
   m_Component:
   - component: {fileID: 215382848}
   - component: {fileID: 215382847}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -796,7 +796,7 @@ GameObject:
   - component: {fileID: 231145826}
   - component: {fileID: 231145828}
   - component: {fileID: 231145827}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: TilemapGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5948,7 +5948,7 @@ Transform:
   m_GameObject: {fileID: 508291926}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.08378386, y: -0.3544156, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9513,7 +9513,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: -8173353090802019188, guid: 7b00e4775eb588941ae6d4d3c2d773f7, type: 3}
+  m_Sprite: {fileID: 6713740005873358604, guid: d111f84c4f4c61643a4a95f9fedea39a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -9554,16 +9554,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpHeight: 8
   xSpeed: 5
-  animator: {fileID: 1989154604}
   feet: {fileID: 508291927}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 512
-  sizeScale: 0.4
-  capsuleX: 0.7
-  capsuleY: 0.5
-  spriteTest: {fileID: -8173353090802019188, guid: 7b00e4775eb588941ae6d4d3c2d773f7, type: 3}
-  spriteRenderer: {fileID: 1989154600}
+    m_Bits: 64
+  sizeScale: 1
+  capsuleX: 0.20094
+  capsuleY: 0.3134254
+  animator: {fileID: 1989154604}
 --- !u!61 &1989154603
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9598,17 +9596,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.029936314, y: 0.10357499}
+  m_Offset: {x: 0.1646347, y: 0.12870742}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.0625, y: 1.5}
+    oldSize: {x: 1.0266666, y: 0.92}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.5966676, y: 1.1622858}
+  m_Size: {x: 0.64044607, y: 1.112021}
   m_EdgeRadius: 0
 --- !u!95 &1989154604
 Animator:
@@ -9666,8 +9664,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.019423962, y: 0.19409668}
-  m_Size: {x: 0.65841675, y: 1.3829246}
+  m_Offset: {x: 0.1449275, y: 0.10207025}
+  m_Size: {x: 0.62853575, y: 1.0657349}
   m_Direction: 0
 --- !u!1 &2008563267
 GameObject:

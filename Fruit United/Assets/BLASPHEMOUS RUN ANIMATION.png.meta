@@ -1,0 +1,494 @@
+fileFormatVersion: 2
+guid: d111f84c4f4c61643a4a95f9fedea39a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6713740005873358604
+    second: BLASPHEMOUS RUN ANIMATION_0
+  - first:
+      213: 3904665050804620935
+    second: BLASPHEMOUS RUN ANIMATION_1
+  - first:
+      213: 4842042957304510925
+    second: BLASPHEMOUS RUN ANIMATION_2
+  - first:
+      213: -7942800898695535090
+    second: BLASPHEMOUS RUN ANIMATION_3
+  - first:
+      213: 6864429324064480833
+    second: BLASPHEMOUS RUN ANIMATION_4
+  - first:
+      213: -8135684440914134995
+    second: BLASPHEMOUS RUN ANIMATION_5
+  - first:
+      213: 1594580751776985961
+    second: BLASPHEMOUS RUN ANIMATION_6
+  - first:
+      213: -2531982812514959341
+    second: BLASPHEMOUS RUN ANIMATION_7
+  - first:
+      213: -2826636664213180638
+    second: BLASPHEMOUS RUN ANIMATION_8
+  - first:
+      213: -9088110200432693363
+    second: BLASPHEMOUS RUN ANIMATION_9
+  - first:
+      213: 7494163447003154875
+    second: BLASPHEMOUS RUN ANIMATION_10
+  - first:
+      213: -7694329772197509188
+    second: BLASPHEMOUS RUN ANIMATION_11
+  - first:
+      213: 7906341519675925551
+    second: BLASPHEMOUS RUN ANIMATION_12
+  - first:
+      213: 4378294776959358755
+    second: BLASPHEMOUS RUN ANIMATION_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 75
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BLASPHEMOUS RUN ANIMATION_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 136
+        width: 77
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c071964e6fefb2d50800000000000000
+      internalID: 6713740005873358604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BLASPHEMOUS RUN ANIMATION_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 69
+        width: 77
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78e87180d28203630800000000000000
+      internalID: 3904665050804620935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BLASPHEMOUS RUN ANIMATION_2
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 137
+        width: 73
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc931595a64623340800000000000000
+      internalID: 4842042957304510925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BLASPHEMOUS RUN ANIMATION_3
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 68
+        width: 72
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0669975aa085c190800000000000000
+      internalID: -7942800898695535090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BLASPHEMOUS RUN ANIMATION_4
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 134
+        width: 70
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14e53a6d91a534f50800000000000000
+      internalID: 6864429324064480833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BLASPHEMOUS RUN ANIMATION_5
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 129
+        width: 68
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d28f3ae0b1e381f80800000000000000
+      internalID: -8135684440914134995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BLASPHEMOUS RUN ANIMATION_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 79
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 963b75bceb6112610800000000000000
+      internalID: 1594580751776985961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BLASPHEMOUS RUN ANIMATION_7
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 0
+        width: 74
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 310c6aa0c079cdcd0800000000000000
+      internalID: -2531982812514959341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BLASPHEMOUS RUN ANIMATION_8
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 67
+        width: 73
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22f6a781ee4c5c8d0800000000000000
+      internalID: -2826636664213180638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BLASPHEMOUS RUN ANIMATION_9
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 0
+        width: 75
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8fea9f6ceb80e180800000000000000
+      internalID: -9088110200432693363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BLASPHEMOUS RUN ANIMATION_10
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 64
+        width: 71
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb9075303fd900860800000000000000
+      internalID: 7494163447003154875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BLASPHEMOUS RUN ANIMATION_11
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 0
+        width: 69
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb78477a6df383590800000000000000
+      internalID: -7694329772197509188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BLASPHEMOUS RUN ANIMATION_12
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 0
+        width: 78
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f24a439f8b7f8bd60800000000000000
+      internalID: 7906341519675925551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BLASPHEMOUS RUN ANIMATION_13
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 0
+        width: 70
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3275c9607e3d2cc30800000000000000
+      internalID: 4378294776959358755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BLASPHEMOUS RUN ANIMATION_0: 6713740005873358604
+      BLASPHEMOUS RUN ANIMATION_1: 3904665050804620935
+      BLASPHEMOUS RUN ANIMATION_10: 7494163447003154875
+      BLASPHEMOUS RUN ANIMATION_11: -7694329772197509188
+      BLASPHEMOUS RUN ANIMATION_12: 7906341519675925551
+      BLASPHEMOUS RUN ANIMATION_13: 4378294776959358755
+      BLASPHEMOUS RUN ANIMATION_2: 4842042957304510925
+      BLASPHEMOUS RUN ANIMATION_3: -7942800898695535090
+      BLASPHEMOUS RUN ANIMATION_4: 6864429324064480833
+      BLASPHEMOUS RUN ANIMATION_5: -8135684440914134995
+      BLASPHEMOUS RUN ANIMATION_6: 1594580751776985961
+      BLASPHEMOUS RUN ANIMATION_7: -2531982812514959341
+      BLASPHEMOUS RUN ANIMATION_8: -2826636664213180638
+      BLASPHEMOUS RUN ANIMATION_9: -9088110200432693363
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
