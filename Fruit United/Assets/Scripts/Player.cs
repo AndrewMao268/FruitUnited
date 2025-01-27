@@ -56,8 +56,6 @@ public class Player : MonoBehaviour
         Vector2 moveValue = InputSystem.actions.FindAction("Move").ReadValue<Vector2>();
         pressingHorizontal = moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Math.Abs(moveValue.x);
         pressingVertical = moveValue.y = moveValue.y == 0.0f ? 0.0f : moveValue.y / Math.Abs(moveValue.y);
-<<<<<<< Updated upstream
-=======
 
         animator.SetFloat("changeSpeed", Mathf.Abs(moveValue.x));
         
@@ -66,7 +64,6 @@ public class Player : MonoBehaviour
 
 
 
->>>>>>> Stashed changes
 
         // Moving Y
         if (moveValue.y == 1.0f && grounded) {
