@@ -62,7 +62,10 @@ public class Player : MonoBehaviour
         pressingHorizontal = moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Math.Abs(moveValue.x);
         pressingVertical = moveValue.y = moveValue.y == 0.0f ? 0.0f : moveValue.y / Math.Abs(moveValue.y);
         
-        animator.SetFloat("changeSpeed", Mathf.Abs(moveValue.x));
+
+        //For Animations
+        float speed = Mathf.Abs(rb.linearVelocity.x);
+        animator.SetFloat("changeSpeed", Mathf.Abs(speed));
         
        
 
