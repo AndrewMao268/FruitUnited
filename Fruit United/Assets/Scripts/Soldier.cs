@@ -20,7 +20,7 @@ public class Soldier : MonoBehaviour
         player = GameObject.Find("Player");
 
         System.Random random = new System.Random();
-        transform.position = new Vector2(random.Next(950, 2300) / 10.0f, 5.0f);
+        transform.position = new Vector2(random.Next(200, 1300) / 10.0f, 5.0f);
     }
 
     // Update is called once per frame

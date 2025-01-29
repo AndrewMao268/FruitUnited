@@ -23,10 +23,12 @@ public class Player : MonoBehaviour
     public float sizeScale = 0.2f;
     public float capsuleX = 1.5f;
     public float capsuleY = 0.5f;
+
+    public float maxSpeedX = 10.0f;
     
     public Animator animator;
 
-
+    private bool previousGround = false;
     
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -51,7 +53,7 @@ public class Player : MonoBehaviour
         // check if feet box is touching the tilemap
         // grounded = transform.Find("Feet").gameObject.GetComponent<BoxCollider2D>().IsTouching(GameObject.Find("TilemapGround").gameObject.GetComponent<TilemapCollider2D>());
         grounded = Physics2D.OverlapCapsule(feet.position, new Vector2(capsuleX, capsuleY), CapsuleDirection2D.Horizontal, 0, groundLayer);
-        Debug.Log(grounded);
+        
 
         // -0.255483, -2.785763
         // 1.827254, 0.8648027
@@ -74,13 +76,16 @@ public class Player : MonoBehaviour
 
 
         // Moving Y
-        if (moveValue.y == 1.0f && grounded) {
+        if (moveValue.y == 1.0f && grounded && previousGround) {
             rb.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
             return;
         }
 
         // Moving X
-        rb.AddForce(new Vector2(moveValue.x * xSpeed, 0.0f), ForceMode2D.Force);
+        if (Math.Abs(rb.linearVelocityX) < maxSpeedX)
+            rb.AddForce(new Vector2(moveValue.x * xSpeed, 0.0f), ForceMode2D.Force);
+
+        previousGround = grounded;
     }
 
     void OnCollisionEnter2D(Collision2D collision2D) {
