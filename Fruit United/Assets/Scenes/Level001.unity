@@ -11382,7 +11382,7 @@ GameObject:
   - component: {fileID: 1575187730}
   - component: {fileID: 1575187731}
   m_Layer: 0
-  m_Name: test
+  m_Name: Soldier Boundary?
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12853,6 +12853,18 @@ PrefabInstance:
     - target: {fileID: 3056913028832161964, guid: 4e25d0f6b5f2dce4583a2960054bc61c, type: 3}
       propertyPath: m_SortingOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6592530237879012995, guid: 4e25d0f6b5f2dce4583a2960054bc61c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6592530237879012995, guid: 4e25d0f6b5f2dce4583a2960054bc61c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6592530237879012995, guid: 4e25d0f6b5f2dce4583a2960054bc61c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6592530237879012995, guid: 4e25d0f6b5f2dce4583a2960054bc61c, type: 3}
       propertyPath: m_LocalPosition.x
