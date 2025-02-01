@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 1551828644}
   - component: {fileID: 1551828648}
   - component: {fileID: 1551828647}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: TilemapGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}

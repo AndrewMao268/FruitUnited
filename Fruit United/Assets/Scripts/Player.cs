@@ -21,7 +21,6 @@ public class Player : MonoBehaviour
     private float pressingVertical = 0.0f;
     private float lastHorizontal = 0.0f;
 
-    public float sizeScale = 0.2f;
     public float capsuleX = 1.5f;
     public float capsuleY = 0.5f;
 
@@ -43,9 +42,9 @@ public class Player : MonoBehaviour
     private void Update()
     {
         if (lastHorizontal > 0.0f)
-            transform.localScale = new Vector2(-sizeScale, sizeScale);
+            transform.localScale = new Vector2(-Math.Abs(transform.localScale.x), Math.Abs(transform.localScale.y));
         else
-            transform.localScale = new Vector2(sizeScale, sizeScale);
+            transform.localScale = new Vector2(Math.Abs(transform.localScale.x), Math.Abs(transform.localScale.y));
     }
 
     // Update is called once per frame
