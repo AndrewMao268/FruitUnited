@@ -69,13 +69,9 @@ public class Player : MonoBehaviour
         float speed = Mathf.Abs(rb.linearVelocity.x);
         animator.SetFloat("changeSpeed", Mathf.Abs(speed));
         
-        /*if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space))
-        {
-            animator.SetBool("IsJumping", true);
-        } else {
-            animator.SetBool("IsJumping", false);
-        }
-        */
+        
+            animator.SetBool("IsJumping", !grounded);
+        
        
 
 
