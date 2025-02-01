@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
 
     private float pressingHorizontal = 0.0f;
     private float pressingVertical = 0.0f;
+    private float lastHorizontal = 0.0f;
 
     public float sizeScale = 0.2f;
     public float capsuleX = 1.5f;
@@ -41,7 +42,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (pressingHorizontal >= 0.0f)
+        if (lastHorizontal > 0.0f)
             transform.localScale = new Vector2(-sizeScale, sizeScale);
         else
             transform.localScale = new Vector2(sizeScale, sizeScale);
@@ -63,7 +64,10 @@ public class Player : MonoBehaviour
         Vector2 moveValue = InputSystem.actions.FindAction("Move").ReadValue<Vector2>();
         pressingHorizontal = moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Math.Abs(moveValue.x);
         pressingVertical = moveValue.y = moveValue.y == 0.0f ? 0.0f : moveValue.y / Math.Abs(moveValue.y);
-        
+        if (pressingHorizontal != 0.0f)
+        {
+            lastHorizontal = pressingHorizontal;
+        }
 
         //For Animations
         float speed = Mathf.Abs(rb.linearVelocity.x);
