@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
     public float xAccel = 7.0f;
     public float maxSpeedX = 10.0f;
 
+    public CapsuleCollider2D capsuleCollider2D;
+
     public Transform feet;
     public LayerMask groundLayer;
     public float capsuleX = 1.5f;
@@ -25,10 +27,14 @@ public class Player : MonoBehaviour
     private bool grounded;
     private bool previousGround = false;
     public float jumpImpulse = 4.0f;
+
+    private GameObject targetObject;
+    
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        capsuleCollider2D = GetComponentInChildren<CapsuleCollider2D>();
         DontDestroyOnLoad(gameObject);
         rb = GetComponent<Rigidbody2D>();
         grounded = false;
@@ -38,10 +44,13 @@ public class Player : MonoBehaviour
     {
         if (lastHorizontal > 0.0f)
         {
+            //attack "sword" collider
+            capsuleCollider2D.offset = new Vector2(-0.5f, capsuleCollider2D.offset.y);
             transform.localScale = new Vector2(-Math.Abs(transform.localScale.x), Math.Abs(transform.localScale.y));
         }
         else
         {
+            capsuleCollider2D.offset = new Vector2(-0.4f, capsuleCollider2D.offset.y);
             transform.localScale = new Vector2(Math.Abs(transform.localScale.x), Math.Abs(transform.localScale.y));
         }
     }
@@ -75,6 +84,14 @@ public class Player : MonoBehaviour
         }
 
         previousGround = grounded;
+
+
+        //early in development attacking
+        if (targetObject != null && Input.GetKeyDown(KeyCode.F))
+            {
+                Destroy(targetObject);
+                targetObject = null;
+            }
     }
 
     void OnCollisionEnter2D(Collision2D collision2D)
@@ -83,6 +100,15 @@ public class Player : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             transform.position = new Vector2(0.0f, 4.0f);
+        }
+    }
+
+    //early in development attacking
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.CompareTag("Soldiers"))
+        {
+            targetObject = col.gameObject;
         }
     }
 
