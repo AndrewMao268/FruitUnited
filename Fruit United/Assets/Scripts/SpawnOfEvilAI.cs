@@ -3,6 +3,7 @@ using UnityEngine.Tilemaps;
 using System.Collections.Generic;
 using QuikGraph;
 using SurfaceGraph = QuikGraph.AdjacencyGraph<Platform, QuikGraph.Edge<Platform>>;
+using System.Linq;
 
 public class SpawnOfEvilAI : MonoBehaviour
 {
@@ -16,14 +17,18 @@ public class SpawnOfEvilAI : MonoBehaviour
 
     public float jumpHeight = 5.0f;
 
-    private List<JumpTrajectory> trajectories;
+    private List<JumpTrajectory> worldTrajectories;
+    private List<JumpTrajectory> tilemapTrajectories;
+
     public int trajectoryView = 0;
 
     private List<GameObject> brushes = new List<GameObject>();
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        trajectories = new List<JumpTrajectory>();
+        worldTrajectories = new List<JumpTrajectory>();
+        tilemapTrajectories = new List<JumpTrajectory>();
+
     }
 
     // Update is called once per frame
@@ -33,7 +38,7 @@ public class SpawnOfEvilAI : MonoBehaviour
         {
             Destroy(go);
         }
-        trajectories.Clear();
+        worldTrajectories.Clear();
 
 
         // Step 1
@@ -71,7 +76,7 @@ public class SpawnOfEvilAI : MonoBehaviour
         //Debug.Log("lowestY: " + lowestX);
         //Debug.Log("highestY: " + highestX);
         highlightPlatforms(platforms);
-        printPlatforms(platforms);
+        // printPlatforms(platforms);
 
         highlightATile(new Vector3Int(0, 0, 0), new Color(0.5f, 0.0f, 1.0f, 1.0f));
 
@@ -113,7 +118,7 @@ public class SpawnOfEvilAI : MonoBehaviour
             }
         }
 
-        drawTrajectory(trajectories[trajectoryView]);
+        drawTrajectory(trajectoryView);
     }
 
     private float mapRange(float input, float inputStart, float inputEnd, float outputStart, float outputEnd)
@@ -126,6 +131,15 @@ public class SpawnOfEvilAI : MonoBehaviour
         float x = tilemapPos.x + 0.5f;
         float y = tilemapPos.y + 0.5f;
         float z = tilemapPos.z;
+
+        return new Vector3(x, y, z);
+    }
+
+    private Vector3 worldToTilemapPos(Vector3 worldPos)
+    {
+        float x = worldPos.x - 0.5f;
+        float y = worldPos.y - 0.5f;
+        float z = worldPos.z;
 
         return new Vector3(x, y, z);
     }
@@ -143,21 +157,38 @@ public class SpawnOfEvilAI : MonoBehaviour
             }
 
             float x1 = leftPlatform.start.x + leftPlatform.length - 1.0f;
-            float y1 = leftPlatform.start.y;
+            float y1 = leftPlatform.start.y + 1.0f;
             Vector3 worldPos1 = tilemapToWorldPos(new Vector3(x1, y1, 0.0f));
-            x1 = worldPos1.x;
-            y1 = worldPos1.y + 0.5f;
-
             float x2 = rightPlatform.start.x;
-            float y2 = rightPlatform.start.y;
+            float y2 = rightPlatform.start.y + 1.0f;
             Vector3 worldPos2 = tilemapToWorldPos(new Vector3(x2, y2, 0.0f));
+
+            JumpTrajectory tilemapTrajectory = calculateTrajectory(x1, y1, x2, y2);
+
+            x1 = worldPos1.x;
+            y1 = worldPos1.y;
             x2 = worldPos2.x;
-            y2 = worldPos2.y + 0.5f;
+            y2 = worldPos2.y;
 
-            JumpTrajectory trajectory = calculateTrajectory(x1, y1, x2, y2);
-            trajectories.Add(trajectory);
+            JumpTrajectory worldTrajectory = calculateTrajectory(x1, y1, x2, y2);
 
-            
+            List<Vector3Int> crossedTiles = crawlTrajectory(tilemapTrajectory);
+            bool spaceFree = true;
+            foreach (Vector3Int crossedTile in crossedTiles)
+            {
+                if (tilemap.HasTile(crossedTile))
+                {
+                    spaceFree = false;
+                }
+            }
+
+            if (!spaceFree)
+            {
+                return;
+            }
+
+            tilemapTrajectories.Add(tilemapTrajectory);
+            worldTrajectories.Add(worldTrajectory);
         }
     }
 
@@ -202,19 +233,133 @@ public class SpawnOfEvilAI : MonoBehaviour
         }
     }
 
-    private void drawTrajectory(JumpTrajectory trajectory)
+    private List<Vector3Int> crawlTrajectory(JumpTrajectory trajectory)
     {
-        float x1 = trajectory.x1;
-        float x2 = trajectory.x2;
+        HashSet<Vector3Int> tilePositions = new HashSet<Vector3Int>();
+
+        int xStart = (int)trajectory.x1;
+        int xEnd = (int)trajectory.x2;
+
+        // Debug.Log("Debug Start");
+
+        //float x1 = xStart;
+        //float y1 = getYFromTrajectory(trajectory, xStart);
+        //for (int i = xStart + 1; i <= xEnd; i++)
+        //{
+        //    float x2 = i;
+        //    float y2 = getYFromTrajectory(trajectory, x2);
+
+        //    //Vector3 pos1 = worldToTilemapPos(new Vector3(x1, y1, 0.0f));
+        //    //Vector3 pos2 = worldToTilemapPos(new Vector3(x2, y2, 0.0f));
+        //    //crawlLine(ref tilePositions, pos1.x, pos1.y, pos2.x, pos2.y);
+
+
+        //    crawlLine(ref tilePositions, x1, y1, x2, y2);
+
+        //    x1 = x2;
+        //    y1 = y2;
+        //}
+
+        for (float i = xStart; i <= xEnd; i += 0.1f)
+        {
+            float fx = i;
+            float fy = getYFromTrajectory(trajectory, fx);
+
+            int x = Mathf.RoundToInt(fx);
+            int y = Mathf.RoundToInt(fy);
+
+            tilePositions.Add(new Vector3Int(x, y, 0));
+        }
+
+        List<Vector3Int> tileList = new List<Vector3Int>(tilePositions.ToArray());
+
+        return tileList;
+    }
+
+    private float crawlProgress(float start, float finish, float value)
+    {
+        if (start == finish)
+            return 1.0f;
+        else if (Mathf.Sign(finish - start) != Mathf.Sign(finish - value))
+            return 1.0f;
+        else
+            return (value - start) / (finish - start);
+    }
+
+    private void crawlLine(ref HashSet<Vector3Int> tilePositions, float fx1, float fy1, float fx2, float fy2)
+    {
+        int x1 = Mathf.RoundToInt(fx1);
+        int y1 = Mathf.RoundToInt(fy1);
+        int x2 = Mathf.RoundToInt(fx2);
+        int y2 = Mathf.RoundToInt(fy2);
+
+        int xDir = x2 > x1 ? 1 : -1;
+        int xCurrent = x1;
+        float xProgress = crawlProgress(x1, x2, xCurrent);
+
+        int yDir = y2 > y1 ? 1 : -1;
+        int yCurrent = y1;
+        float yProgress = crawlProgress(y1, y2, yCurrent);
+
+        tilePositions.Add(new Vector3Int(xCurrent, yCurrent, 0));
+
+        while (xProgress < 1.0f || yProgress < 1.0f)
+        {
+            bool shouldMoveX = xProgress <= yProgress;
+            bool shouldMoveY = yProgress <= xProgress;
+
+            if (shouldMoveX && shouldMoveY)
+            {
+                float tempXProgress = crawlProgress(x1, x2, xCurrent + 0.1f * xDir);
+                float tempYProgress = crawlProgress(y1, y2, yCurrent + 0.1f * yDir);
+                shouldMoveX = tempXProgress <= tempYProgress;
+                shouldMoveY = tempYProgress <= tempXProgress;
+
+            }
+
+            if (shouldMoveX)
+            {
+                xCurrent += xDir;
+                xProgress = crawlProgress(x1, x2, xCurrent);
+            }
+            if (shouldMoveY)
+            {
+                yCurrent += yDir;
+                yProgress = crawlProgress(y1, y2, yCurrent);
+            }
+
+            tilePositions.Add(new Vector3Int(xCurrent, yCurrent, 0));
+        }
+    }
+
+    private float getYFromTrajectory(JumpTrajectory trajectory, float x)
+    {
+        return trajectory.a * Mathf.Pow(x, 2.0f) + trajectory.b * x + trajectory.c;
+    }
+
+    private void drawTrajectory(int trajectoryIndex)
+    {
+        JumpTrajectory worldTrajectory = worldTrajectories[trajectoryIndex];
+        JumpTrajectory tilemapTrajectory = tilemapTrajectories[trajectoryIndex];
+
+        float x1 = worldTrajectory.x1;
+        float x2 = worldTrajectory.x2;
 
         float step = (x2 - x1) / 50.0f;
         for (int i = 0; i < 51; i++)
         {
             float x = x1 + i * step;
-            float y = trajectory.a * Mathf.Pow(x, 2.0f) + trajectory.b * x + trajectory.c;
+            float y = getYFromTrajectory(worldTrajectory, x);
             //Debug.Log(trajectory.toString());
             GameObject gameObject = Instantiate(trajectoryBrush, new Vector3(x, y, 0.0f), Quaternion.identity);
             brushes.Add(gameObject);
+        }
+
+        List<Vector3Int> tileList = crawlTrajectory(tilemapTrajectory);
+
+        foreach (Vector3Int pos in tileList)
+        {
+            highlightATile(pos, new Color(1.0f, 0.0f, 0.0f, 0.5f));
         }
     }
 
