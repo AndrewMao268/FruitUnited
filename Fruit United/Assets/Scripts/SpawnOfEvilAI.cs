@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
-using QuikGraph;
-using SurfaceGraph = QuikGraph.AdjacencyGraph<Platform, QuikGraph.Edge<Platform>>;
+
+using Edge = QuikGraph.TaggedEdge<Platform, TrajectoryBundle>;
+using SurfaceGraph = QuikGraph.AdjacencyGraph<Platform, QuikGraph.TaggedEdge<Platform, TrajectoryBundle>>;
 using System.Linq;
 using System;
+using QuikGraph.Algorithms;
 
 public class SpawnOfEvilAI : MonoBehaviour
 {
@@ -17,11 +19,11 @@ public class SpawnOfEvilAI : MonoBehaviour
     // public int agentHeight = 1;
 
     public float jumpHeight = 3.0f;
-    private float previousJumpHeight = 0.0f;
 
     public float minAccel = 10.0f;
     private float previousMinAccel = 0.0f;
 
+    private SurfaceGraph graph;
     private List<Platform> platforms;
     private List<int> indices;
     private List<JumpTrajectory> worldTrajectories;
@@ -34,6 +36,7 @@ public class SpawnOfEvilAI : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        graph = new SurfaceGraph(true);
         platforms = new List<Platform>();
         worldTrajectories = new List<JumpTrajectory>();
         tilemapTrajectories = new List<JumpTrajectory>();
@@ -54,6 +57,8 @@ public class SpawnOfEvilAI : MonoBehaviour
             Destroy(go);
         }
         highlightTilemap.ClearAllTiles();
+        highlightPlatforms(platforms);
+        highlightATile(new Vector3Int(0, 0, 0), new Color(0.5f, 0.0f, 1.0f, 1.0f));
 
         if (previousMinAccel != minAccel)
         {
@@ -61,11 +66,15 @@ public class SpawnOfEvilAI : MonoBehaviour
             worldTrajectories.Clear();
 
             findTrajectories();
-            Debug.Log(tilemapTrajectories.Count);
+
+            Debug.Log("Total number of platforms: " + platforms.Count);
+            Debug.Log("Total number of trajectories: " + tilemapTrajectories.Count);
         }
 
-        drawTrajectory(indices[trajectoryView]);
+        testAStar();
 
+        //drawTrajectory(indices[trajectoryView]);
+        //drawTrajectory(trajectoryView);
 
         previousTrajectoryView = trajectoryView;
         previousMinAccel = minAccel;
@@ -107,15 +116,19 @@ public class SpawnOfEvilAI : MonoBehaviour
 
         //Debug.Log("lowestY: " + lowestX);
         //Debug.Log("highestY: " + highestX);
-        highlightPlatforms(platforms);
+        
         // printPlatforms(platforms);
 
-        highlightATile(new Vector3Int(0, 0, 0), new Color(0.5f, 0.0f, 1.0f, 1.0f));
     }
 
     private void findTrajectories()
     {
-        SurfaceGraph graph = new SurfaceGraph();
+        graph.Clear();
+
+        for (int i = 0; i < platforms.Count; i++)
+        {
+            graph.AddVertex(platforms[i]);
+        }
 
         for (int i = 0; i < platforms.Count; i++)
         {
@@ -127,6 +140,51 @@ public class SpawnOfEvilAI : MonoBehaviour
 
         indices = Enumerable.Range(0, tilemapTrajectories.Count - 1).ToList();
         indices.Sort((int a, int b) => (int)((Mathf.Abs(tilemapTrajectories[a].a) - Mathf.Abs(tilemapTrajectories[b].a)) * 1000.0f));
+    }
+
+    private void testAStar()
+    {
+        IEnumerable<Edge> edgeInterface = null;
+        System.Random random = new System.Random();
+
+        Platform platform0 = platforms[0];
+        Platform platform1 = platforms[1];
+
+        int iterations = 0;
+        while (edgeInterface == null && iterations < 100)
+        {
+            platform0 = platforms[(int)(random.NextDouble() * platforms.Count)];
+            platform1 = platforms[(int)(random.NextDouble() * platforms.Count)];
+
+            graph.ShortestPathsAStar((Edge edge) => 1.0, (Platform p) => 1.0, platform0)(platform1, out edgeInterface);
+
+            iterations++;
+        }
+
+        Debug.Log(platform0.toString());
+        Debug.Log(platform1.toString());
+        highlightPlatform(platform0, (_) => new Color(0.0f, 1.0f, 0.0f, 1.0f));
+        highlightPlatform(platform1, (_) => new Color(0.0f, 0.0f, 1.0f, 1.0f));
+
+
+        if (graph.IsOutEdgesEmpty(platform0))
+        {
+            Debug.Log("No out edges");
+        }
+
+        if (edgeInterface == null)
+        {
+            Debug.Log("edgeInterface is null");
+            return;
+        }
+
+        List<Edge> edges = edgeInterface.ToList();
+
+        Debug.Log("Edges: " + edges.Count);
+        foreach (Edge edge in edges)
+        {
+            drawTrajectory(edge.Tag.tilemap, edge.Tag.world);
+        }
     }
 
     private float mapRange(float input, float inputStart, float inputEnd, float outputStart, float outputEnd)
@@ -154,80 +212,109 @@ public class SpawnOfEvilAI : MonoBehaviour
 
     private void handleEdgeCreation(Platform platform0, Platform platform1, ref SurfaceGraph graph)
     {
-        JumpTrajectory tilemapTrajectory;
-        JumpTrajectory worldTrajectory;
-
         float x1;
         float y1;
         float x2;
         float y2;
 
-        if (platform0.start.y == platform1.start.y)
+        //if (platform0.start.y == platform1.start.y)
+        //{
+        //    // Get left and right platforms
+        //    Platform leftPlatform = platform0;
+        //    Platform rightPlatform = platform1;
+        //    if (leftPlatform.start.x > rightPlatform.start.x)
+        //    {
+        //        (leftPlatform, rightPlatform) = (rightPlatform, leftPlatform);
+        //    }
+
+        //    x1 = leftPlatform.start.x + leftPlatform.length - 1.0f;
+        //    y1 = leftPlatform.start.y + 1.0f;
+        //    x2 = rightPlatform.start.x;
+        //    y2 = rightPlatform.start.y + 1.0f;
+
+        //    platform0 = leftPlatform;
+        //    platform1 = rightPlatform;
+        //}
+        //else
+        //{
+        //    Platform topPlatform = platform0;
+        //    Platform bottomPlatform = platform1;
+
+        //    if (topPlatform.start.y < bottomPlatform.start.y)
+        //    {
+        //        (topPlatform, bottomPlatform) = (bottomPlatform, topPlatform);
+        //    }
+
+        //    float topLeft = topPlatform.start.x;
+        //    float topRight = topPlatform.start.x + topPlatform.length - 1.0f;
+        //    float bottomLeft = bottomPlatform.start.x;
+        //    float bottomRight = bottomPlatform.start.x + bottomPlatform.length - 1.0f;
+
+        //    y1 = topPlatform.start.y + 1.0f;
+        //    y2 = bottomPlatform.start.y + 1.0f;
+
+        //    if (topLeft > bottomLeft)
+        //    {
+        //        x1 = topLeft;
+        //        x2 = bottomLeft;
+        //    }
+        //    else if (topRight < bottomRight)
+        //    {
+        //        x1 = topRight;
+        //        x2 = bottomRight;
+        //    }
+        //    else if (topLeft < bottomLeft && topRight < bottomLeft)
+        //    {
+        //        x1 = topRight;
+        //        x2 = bottomLeft;
+        //    }
+        //    else if (topLeft > bottomRight && topRight > bottomRight)
+        //    {
+        //        x1 = topLeft;
+        //        x2 = bottomRight;
+        //    }
+        //    else
+        //    {
+        //        return;
+        //    }
+
+        //    platform0 = topPlatform;
+        //    platform1 = bottomPlatform;
+        //}
+
+        for (int i = 0; i < platform0.length; i++)
         {
-            // Get left and right platforms
-            Platform leftPlatform = platform0;
-            Platform rightPlatform = platform1;
-            if (leftPlatform.start.x > rightPlatform.start.x)
+            for (int j = 0; j < platform1.length; j++)
             {
-                (leftPlatform, rightPlatform) = (rightPlatform, leftPlatform);
+                x1 = platform0.start.x + i;
+                y1 = platform0.start.y + 1.0f;
+                x2 = platform1.start.x + j;
+                y2 = platform1.start.y + 1.0f;
+
+                if (x1 != x2)
+                {
+                    handleTrajectory(x1, y1, x2, y2, platform0, platform1, ref graph);
+                    handleTrajectory(x2, y2, x1, y1, platform1, platform0, ref graph);
+                }
             }
-
-            x1 = leftPlatform.start.x + leftPlatform.length - 1.0f;
-            y1 = leftPlatform.start.y + 1.0f;
-            x2 = rightPlatform.start.x;
-            y2 = rightPlatform.start.y + 1.0f;
-
-            tilemapTrajectory = calculateTrajectory(x1, y1, x2, y2);
         }
-        else
+
+        //handleTrajectory(x1, y1, x2, y2, platform0, platform1, ref graph);
+        //handleTrajectory(x2, y2, x1, y1, platform1, platform0, ref graph);
+    }
+
+    private bool handleTrajectory(float x1, float y1, float x2, float y2, Platform platform0, Platform platform1, ref SurfaceGraph graph)
+    {
+        if (y2 - y1 > jumpHeight)
         {
-            Platform topPlatform = platform0;
-            Platform bottomPlatform = platform1;
-
-            if (topPlatform.start.y < bottomPlatform.start.y)
-            {
-                (topPlatform, bottomPlatform) = (bottomPlatform, topPlatform);
-            }
-
-            float topLeft = topPlatform.start.x;
-            float topRight = topPlatform.start.x + topPlatform.length - 1.0f;
-            float bottomLeft = bottomPlatform.start.x;
-            float bottomRight = bottomPlatform.start.x + bottomPlatform.length - 1.0f;
-
-            y1 = topPlatform.start.y + 1.0f;
-            y2 = bottomPlatform.start.y + 1.0f;
-
-            if (topLeft > bottomLeft)
-            {
-                x1 = topLeft;
-                x2 = bottomLeft;
-            }
-            else if (topRight < bottomRight)
-            {
-                x1 = topRight;
-                x2 = bottomRight;
-            }
-            else if (topLeft < bottomLeft && topRight < bottomLeft)
-            {
-                x1 = topRight;
-                x2 = bottomLeft;
-            }
-            else if (topLeft > bottomRight && topRight > bottomRight)
-            {
-                x1 = topLeft;
-                x2 = bottomRight;
-            }
-            else
-            {
-                return;
-            }
-
-            tilemapTrajectory = calculateTrajectory(x1, y1, x2, y2);
+            return false;
         }
 
-        if (!verifyTrajectory(tilemapTrajectory))
+        JumpTrajectory tilemapTrajectory = generateTrajectory(x1, y1, x2, y2, platform0, platform1);
+
+        if (!verifyTrajectory(tilemapTrajectory, platform0, platform1))
         {
-            return;
+            return false;
         }
 
         Vector3 worldPos1 = tilemapToWorldPos(new Vector3(x1, y1, 0.0f));
@@ -238,13 +325,21 @@ public class SpawnOfEvilAI : MonoBehaviour
         x2 = worldPos2.x;
         y2 = worldPos2.y;
 
-        worldTrajectory = calculateTrajectory(x1, y1, x2, y2);
+        JumpTrajectory worldTrajectory = generateTrajectory(x1, y1, x2, y2, platform0, platform1);
 
         tilemapTrajectories.Add(tilemapTrajectory);
         worldTrajectories.Add(worldTrajectory);
+
+        bool success = graph.AddEdge(new Edge(platform0, platform1, new TrajectoryBundle(tilemapTrajectory, worldTrajectory)));
+        if (!success)
+        {
+            Debug.Log("Not a success!");
+        }
+
+        return true;
     }
 
-    private bool verifyTrajectory(JumpTrajectory trajectory)
+    private bool verifyTrajectory(JumpTrajectory trajectory, Platform platform0, Platform platform1)
     {
         if (2.0f * Mathf.Abs(trajectory.a) < minAccel)
         {
@@ -252,6 +347,9 @@ public class SpawnOfEvilAI : MonoBehaviour
         }
 
         List<Vector3Int> crossedTiles = crawlTrajectory(trajectory);
+        crossedTiles.Remove(new Vector3Int(Mathf.RoundToInt(trajectory.x1), Mathf.RoundToInt(trajectory.y1), 0));
+        crossedTiles.Remove(new Vector3Int(Mathf.RoundToInt(trajectory.x2), Mathf.RoundToInt(trajectory.y2), 0));
+
         bool spaceFree = true;
         foreach (Vector3Int crossedTile in crossedTiles)
         {
@@ -274,7 +372,7 @@ public class SpawnOfEvilAI : MonoBehaviour
         return Mathf.Sqrt(Mathf.Pow(x2 - x1, 2.0f) + Mathf.Pow(y2 - y1, 2.0f));
     }
 
-    private JumpTrajectory calculateTrajectory(float x1, float y1, float x2, float y2)
+    private JumpTrajectory generateTrajectory(float x1, float y1, float x2, float y2, Platform platform0, Platform platform1)
     {
         float k = y1 + jumpHeight;
 
@@ -291,17 +389,14 @@ public class SpawnOfEvilAI : MonoBehaviour
             h1 = h2 = (x1 + x2) / 2.0f;
         }
 
-        //if (x1 == 128.0f && y1 == -8.0f && x2 == 126.0f && y2 == -15.0f)
-        //{
-        //    Debug.Log("D: " + d + " F: " + f + " G: " + g + " H1: " + h1 + " H2: " + h2);
-        //}
-
         float a1 = (y1 - k) / (Mathf.Pow(x1, 2.0f) - 2.0f * h1 * x1 + Mathf.Pow(h1, 2.0f));
         float a2 = (y1 - k) / (Mathf.Pow(x1, 2.0f) - 2.0f * h2 * x1 + Mathf.Pow(h2, 2.0f));
 
         //if (float.IsNaN(a1) || float.IsNaN(a2))
         //{
-        //    Debug.Log("X1: " + x1 + " Y1: " + y1 + " X2: " + x2 + " Y2: " + y2);
+        //    string debugStr = "X1: " + x1 + " Y1: " + y1 + " X2: " + x2 + " Y2: " + y2;
+        //    debugStr += "\n" + " D: " + d + " F: " + f + " G: " + g + " H1: " + h1 + " H2: " + h2;
+        //    Debug.Log(debugStr);
         //}
 
         float b1 = -2.0f * a1 * h1;
@@ -312,11 +407,11 @@ public class SpawnOfEvilAI : MonoBehaviour
 
         if (h1 >= x1 && h1 <= x2)
         {
-            return new JumpTrajectory(a1, b1, c1, x1, y1, x2, y2);
+            return new JumpTrajectory(a1, b1, c1, x1, y1, x2, y2, platform0, platform1);
         }
         else
         {
-            return new JumpTrajectory(a2, b2, c2, x1, y1, x2, y2);
+            return new JumpTrajectory(a2, b2, c2, x1, y1, x2, y2, platform0, platform1);
         }
     }
 
@@ -431,9 +526,11 @@ public class SpawnOfEvilAI : MonoBehaviour
 
     private void drawTrajectory(int trajectoryIndex)
     {
-        JumpTrajectory worldTrajectory = worldTrajectories[trajectoryIndex];
-        JumpTrajectory tilemapTrajectory = tilemapTrajectories[trajectoryIndex];
+        drawTrajectory(tilemapTrajectories[trajectoryIndex], worldTrajectories[trajectoryIndex]);
+    }
 
+    private void drawTrajectory(JumpTrajectory tilemapTrajectory, JumpTrajectory worldTrajectory)
+    {
         Debug.Log(tilemapTrajectory.toString());
 
         float x1 = worldTrajectory.x1;
@@ -536,15 +633,25 @@ public class SpawnOfEvilAI : MonoBehaviour
         for (int i = 0; i < platforms.Count; i++)
         {
             Platform platform = platforms[i];
-            for (int x = 0; x < platform.length; x++)
-            {
-                Vector3Int highlightPos = platform.start;
-                highlightPos.x += x;
+            highlightPlatform(platform);
+        }
+    }
 
-                float shade = (float)x / platform.length;
+    private void highlightPlatform(Platform platform)
+    {
+        highlightPlatform(platform, (float x) => new Color(x, x, x, 1.0f));
+    }
 
-                highlightATile(highlightPos, new Color(shade, shade, shade, 1.0f));
-            }
+    private void highlightPlatform(Platform platform, Func<float, Color> shadeFunction)
+    {
+        for (int x = 0; x < platform.length; x++)
+        {
+            Vector3Int highlightPos = platform.start;
+            highlightPos.x += x;
+
+            Color color = shadeFunction((float)x / platform.length);
+
+            highlightATile(highlightPos, color);
         }
     }
 
