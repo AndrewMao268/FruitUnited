@@ -10353,8 +10353,8 @@ MonoBehaviour:
   highlightTilemap: {fileID: 1752867387}
   highlightTile: {fileID: 11400000, guid: a632622381dfdbf448ad2b3b7632aaa8, type: 2}
   trajectoryBrush: {fileID: 7193775468509818103, guid: de8b8f660e21cd448b39ba67788bb9eb, type: 3}
-  agentHeight: 1
-  jumpHeight: 5
+  jumpHeight: 3
+  minAccel: 0.1
   trajectoryView: 0
 --- !u!1 &1146841890
 GameObject:

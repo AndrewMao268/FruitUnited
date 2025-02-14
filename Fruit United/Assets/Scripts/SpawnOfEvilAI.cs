@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using QuikGraph;
 using SurfaceGraph = QuikGraph.AdjacencyGraph<Platform, QuikGraph.Edge<Platform>>;
 using System.Linq;
+using System;
 
 public class SpawnOfEvilAI : MonoBehaviour
 {
@@ -13,34 +14,65 @@ public class SpawnOfEvilAI : MonoBehaviour
     public Tilemap highlightTilemap;
     public Tile highlightTile;
     public GameObject trajectoryBrush;
-    public int agentHeight = 1;
+    // public int agentHeight = 1;
 
-    public float jumpHeight = 5.0f;
+    public float jumpHeight = 3.0f;
+    private float previousJumpHeight = 0.0f;
 
+    public float minAccel = 10.0f;
+    private float previousMinAccel = 0.0f;
+
+    private List<Platform> platforms;
+    private List<int> indices;
     private List<JumpTrajectory> worldTrajectories;
     private List<JumpTrajectory> tilemapTrajectories;
 
     public int trajectoryView = 0;
+    private int previousTrajectoryView = 1;
 
     private List<GameObject> brushes = new List<GameObject>();
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        platforms = new List<Platform>();
         worldTrajectories = new List<JumpTrajectory>();
         tilemapTrajectories = new List<JumpTrajectory>();
 
+        FindSurfaces();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (previousMinAccel == minAccel && previousTrajectoryView == trajectoryView)
+        {
+            return;
+        }
+
         foreach (GameObject go in brushes)
         {
             Destroy(go);
         }
-        worldTrajectories.Clear();
+        highlightTilemap.ClearAllTiles();
+
+        if (previousMinAccel != minAccel)
+        {
+            tilemapTrajectories.Clear();
+            worldTrajectories.Clear();
+
+            findTrajectories();
+            Debug.Log(tilemapTrajectories.Count);
+        }
+
+        drawTrajectory(indices[trajectoryView]);
 
 
+        previousTrajectoryView = trajectoryView;
+        previousMinAccel = minAccel;
+    }
+
+    private void FindSurfaces()
+    {
         // Step 1
         int z = tilemap.cellBounds.z;
 
@@ -50,7 +82,7 @@ public class SpawnOfEvilAI : MonoBehaviour
         int lowestX = tilemap.cellBounds.min.x;
         int highestX = tilemap.cellBounds.max.x;
 
-        List<Platform> platforms = new List<Platform>();
+        platforms.Clear();
 
         for (int y = lowestY; y <= highestY; y++)
         {
@@ -79,9 +111,10 @@ public class SpawnOfEvilAI : MonoBehaviour
         // printPlatforms(platforms);
 
         highlightATile(new Vector3Int(0, 0, 0), new Color(0.5f, 0.0f, 1.0f, 1.0f));
+    }
 
-        // Step 2
-
+    private void findTrajectories()
+    {
         SurfaceGraph graph = new SurfaceGraph();
 
         for (int i = 0; i < platforms.Count; i++)
@@ -89,36 +122,11 @@ public class SpawnOfEvilAI : MonoBehaviour
             for (int j = i + 1; j < platforms.Count; j++)
             {
                 handleEdgeCreation(platforms[i], platforms[j], ref graph);
-
-                Platform lowPlatform;
-                Platform highPlatform;
-
-                if (platforms[i].start.y < platforms[j].start.y)
-                {
-
-                }
-
-
-                float startX1 = platforms[i].start.x;
-                float startX2 = platforms[j].start.x;
-                float startY1 = platforms[i].start.y;
-                float startY2 = platforms[j].start.y;
-                float length1 = platforms[i].length;
-                float length2 = platforms[j].length;
-
-                float minXDistance = Mathf.Infinity;
-                minXDistance = Mathf.Min(minXDistance, Mathf.Abs(startX1 - startX2));
-                minXDistance = Mathf.Min(minXDistance, Mathf.Abs(startX1 - (startX2 + length2 - 1.0f)));
-                minXDistance = Mathf.Min(minXDistance, Mathf.Abs((startX1 + length1 - 1.0f) - startX2));
-                minXDistance = Mathf.Min(minXDistance, Mathf.Abs((startX1 + length1 - 1.0f) - (startX2 + length2 - 1.0f)));
-
-                float yDistance = startY2 - startY1;
-
-                
             }
         }
 
-        drawTrajectory(trajectoryView);
+        indices = Enumerable.Range(0, tilemapTrajectories.Count - 1).ToList();
+        indices.Sort((int a, int b) => (int)((Mathf.Abs(tilemapTrajectories[a].a) - Mathf.Abs(tilemapTrajectories[b].a)) * 1000.0f));
     }
 
     private float mapRange(float input, float inputStart, float inputEnd, float outputStart, float outputEnd)
@@ -146,6 +154,14 @@ public class SpawnOfEvilAI : MonoBehaviour
 
     private void handleEdgeCreation(Platform platform0, Platform platform1, ref SurfaceGraph graph)
     {
+        JumpTrajectory tilemapTrajectory;
+        JumpTrajectory worldTrajectory;
+
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+
         if (platform0.start.y == platform1.start.y)
         {
             // Get left and right platforms
@@ -156,40 +172,101 @@ public class SpawnOfEvilAI : MonoBehaviour
                 (leftPlatform, rightPlatform) = (rightPlatform, leftPlatform);
             }
 
-            float x1 = leftPlatform.start.x + leftPlatform.length - 1.0f;
-            float y1 = leftPlatform.start.y + 1.0f;
-            Vector3 worldPos1 = tilemapToWorldPos(new Vector3(x1, y1, 0.0f));
-            float x2 = rightPlatform.start.x;
-            float y2 = rightPlatform.start.y + 1.0f;
-            Vector3 worldPos2 = tilemapToWorldPos(new Vector3(x2, y2, 0.0f));
+            x1 = leftPlatform.start.x + leftPlatform.length - 1.0f;
+            y1 = leftPlatform.start.y + 1.0f;
+            x2 = rightPlatform.start.x;
+            y2 = rightPlatform.start.y + 1.0f;
 
-            JumpTrajectory tilemapTrajectory = calculateTrajectory(x1, y1, x2, y2);
+            tilemapTrajectory = calculateTrajectory(x1, y1, x2, y2);
+        }
+        else
+        {
+            Platform topPlatform = platform0;
+            Platform bottomPlatform = platform1;
 
-            x1 = worldPos1.x;
-            y1 = worldPos1.y;
-            x2 = worldPos2.x;
-            y2 = worldPos2.y;
-
-            JumpTrajectory worldTrajectory = calculateTrajectory(x1, y1, x2, y2);
-
-            List<Vector3Int> crossedTiles = crawlTrajectory(tilemapTrajectory);
-            bool spaceFree = true;
-            foreach (Vector3Int crossedTile in crossedTiles)
+            if (topPlatform.start.y < bottomPlatform.start.y)
             {
-                if (tilemap.HasTile(crossedTile))
-                {
-                    spaceFree = false;
-                }
+                (topPlatform, bottomPlatform) = (bottomPlatform, topPlatform);
             }
 
-            if (!spaceFree)
+            float topLeft = topPlatform.start.x;
+            float topRight = topPlatform.start.x + topPlatform.length - 1.0f;
+            float bottomLeft = bottomPlatform.start.x;
+            float bottomRight = bottomPlatform.start.x + bottomPlatform.length - 1.0f;
+
+            y1 = topPlatform.start.y + 1.0f;
+            y2 = bottomPlatform.start.y + 1.0f;
+
+            if (topLeft > bottomLeft)
+            {
+                x1 = topLeft;
+                x2 = bottomLeft;
+            }
+            else if (topRight < bottomRight)
+            {
+                x1 = topRight;
+                x2 = bottomRight;
+            }
+            else if (topLeft < bottomLeft && topRight < bottomLeft)
+            {
+                x1 = topRight;
+                x2 = bottomLeft;
+            }
+            else if (topLeft > bottomRight && topRight > bottomRight)
+            {
+                x1 = topLeft;
+                x2 = bottomRight;
+            }
+            else
             {
                 return;
             }
 
-            tilemapTrajectories.Add(tilemapTrajectory);
-            worldTrajectories.Add(worldTrajectory);
+            tilemapTrajectory = calculateTrajectory(x1, y1, x2, y2);
         }
+
+        if (!verifyTrajectory(tilemapTrajectory))
+        {
+            return;
+        }
+
+        Vector3 worldPos1 = tilemapToWorldPos(new Vector3(x1, y1, 0.0f));
+        Vector3 worldPos2 = tilemapToWorldPos(new Vector3(x2, y2, 0.0f));
+
+        x1 = worldPos1.x;
+        y1 = worldPos1.y;
+        x2 = worldPos2.x;
+        y2 = worldPos2.y;
+
+        worldTrajectory = calculateTrajectory(x1, y1, x2, y2);
+
+        tilemapTrajectories.Add(tilemapTrajectory);
+        worldTrajectories.Add(worldTrajectory);
+    }
+
+    private bool verifyTrajectory(JumpTrajectory trajectory)
+    {
+        if (2.0f * Mathf.Abs(trajectory.a) < minAccel)
+        {
+            return false;
+        }
+
+        List<Vector3Int> crossedTiles = crawlTrajectory(trajectory);
+        bool spaceFree = true;
+        foreach (Vector3Int crossedTile in crossedTiles)
+        {
+            if (tilemap.HasTile(crossedTile))
+            {
+                spaceFree = false;
+            }
+        }
+
+        if (!spaceFree)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private float distance(float x1, float y1, float x2, float y2)
@@ -201,7 +278,7 @@ public class SpawnOfEvilAI : MonoBehaviour
     {
         float k = y1 + jumpHeight;
 
-        float d = y2 - y1;
+        float d = y1 - y2;
 
         float f = 2.0f * x1 * y2 - 2.0f * y1 * x2 + 2.0f * k * x2 - 2.0f * k * x1;
         float g = -(Mathf.Pow(x1, 2.0f) * (y2 - k) - Mathf.Pow(x2, 2.0f) * (y1 - k));
@@ -214,8 +291,18 @@ public class SpawnOfEvilAI : MonoBehaviour
             h1 = h2 = (x1 + x2) / 2.0f;
         }
 
+        //if (x1 == 128.0f && y1 == -8.0f && x2 == 126.0f && y2 == -15.0f)
+        //{
+        //    Debug.Log("D: " + d + " F: " + f + " G: " + g + " H1: " + h1 + " H2: " + h2);
+        //}
+
         float a1 = (y1 - k) / (Mathf.Pow(x1, 2.0f) - 2.0f * h1 * x1 + Mathf.Pow(h1, 2.0f));
         float a2 = (y1 - k) / (Mathf.Pow(x1, 2.0f) - 2.0f * h2 * x1 + Mathf.Pow(h2, 2.0f));
+
+        //if (float.IsNaN(a1) || float.IsNaN(a2))
+        //{
+        //    Debug.Log("X1: " + x1 + " Y1: " + y1 + " X2: " + x2 + " Y2: " + y2);
+        //}
 
         float b1 = -2.0f * a1 * h1;
         float b2 = -2.0f * a2 * h2;
@@ -225,11 +312,11 @@ public class SpawnOfEvilAI : MonoBehaviour
 
         if (h1 >= x1 && h1 <= x2)
         {
-            return new JumpTrajectory(a1, b1, c1, x1, x2);
+            return new JumpTrajectory(a1, b1, c1, x1, y1, x2, y2);
         }
         else
         {
-            return new JumpTrajectory(a2, b2, c2, x1, x2);
+            return new JumpTrajectory(a2, b2, c2, x1, y1, x2, y2);
         }
     }
 
@@ -239,6 +326,11 @@ public class SpawnOfEvilAI : MonoBehaviour
 
         int xStart = (int)trajectory.x1;
         int xEnd = (int)trajectory.x2;
+
+        if (xStart > xEnd)
+        {
+            (xStart, xEnd) = (xEnd, xStart);
+        }
 
         // Debug.Log("Debug Start");
 
@@ -260,7 +352,7 @@ public class SpawnOfEvilAI : MonoBehaviour
         //    y1 = y2;
         //}
 
-        for (float i = xStart; i <= xEnd; i += 0.1f)
+        for (float i = xStart; i <= xEnd; i += Mathf.Min((xEnd - xStart) / 50.0f, 0.1f))
         {
             float fx = i;
             float fy = getYFromTrajectory(trajectory, fx);
@@ -342,6 +434,8 @@ public class SpawnOfEvilAI : MonoBehaviour
         JumpTrajectory worldTrajectory = worldTrajectories[trajectoryIndex];
         JumpTrajectory tilemapTrajectory = tilemapTrajectories[trajectoryIndex];
 
+        Debug.Log(tilemapTrajectory.toString());
+
         float x1 = worldTrajectory.x1;
         float x2 = worldTrajectory.x2;
 
@@ -350,7 +444,7 @@ public class SpawnOfEvilAI : MonoBehaviour
         {
             float x = x1 + i * step;
             float y = getYFromTrajectory(worldTrajectory, x);
-            //Debug.Log(trajectory.toString());
+            
             GameObject gameObject = Instantiate(trajectoryBrush, new Vector3(x, y, 0.0f), Quaternion.identity);
             brushes.Add(gameObject);
         }
@@ -365,15 +459,17 @@ public class SpawnOfEvilAI : MonoBehaviour
 
     private bool enoughSpace(int x, int y, int z)
     {
-        for (int airY = 1; airY <= agentHeight; airY++)
-        {
-            if (tilemap.HasTile(new Vector3Int(x, y + airY, z)))
-            {
-                return false;
-            }
-        }
+        //for (int airY = 1; airY <= agentHeight; airY++)
+        //{
+        //    if (tilemap.HasTile(new Vector3Int(x, y + airY, z)))
+        //    {
+        //        return false;
+        //    }
+        //}
 
-        return true;
+        //return true;
+
+        return !tilemap.HasTile(new Vector3Int(x, y + 1, z));
     }
 
     private void skipTiles(ref int x, int y, int z)
