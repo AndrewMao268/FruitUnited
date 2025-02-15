@@ -57,8 +57,11 @@ public class HiveAgent
     {
         if (!followingTrajectory)
         {
+            GoToRandomPlace();
             return;
         }
+
+        //Debug.Log(currentTrajectoryIndex);
 
         Trajectory trajectory = trajectories[currentTrajectoryIndex];
         Transform transform = user.transform;
@@ -71,6 +74,10 @@ public class HiveAgent
         {
             JumpTrajectory jumpTrajectory = (JumpTrajectory) trajectory;
             float speed = Mathf.Sqrt(attributes.jumpA / jumpTrajectory.a);
+            if (float.IsNaN(speed))
+            {
+                Debug.Log(jumpTrajectory.toString());
+            }
             float xDir = Mathf.Sign(jumpTrajectory.x2 - jumpTrajectory.x1);
             
             jumpX += (float)(speed * xDir * deltaTime);
@@ -80,7 +87,6 @@ public class HiveAgent
 
             transform.position = new Vector3(xPos, yPos, 0.0f);
 
-
             float jumpProgress = mapRange(jumpX, jumpTrajectory.x1, jumpTrajectory.x2, 0.0f, 1.0f);
             if (jumpProgress > 1.0f)
             {
@@ -88,6 +94,8 @@ public class HiveAgent
                 user.AddComponent<Rigidbody2D>();
                 user.rb = user.GetComponent<Rigidbody2D>();
                 user.rb.linearVelocityX = xDir * speed;
+                //user.rb.linearVelocityX = 0.0f;
+                user.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
                 currentTrajectoryIndex++;
             }
         }
@@ -100,7 +108,7 @@ public class HiveAgent
             }
             JumpTrajectory nextTrajectory = (JumpTrajectory)trajectories[currentTrajectoryIndex + 1];
 
-            float progress = mapRange(transform.position.x, runTrajectory.x1, runTrajectory.x2, 0.0f, 1.0f);
+            float progress = mapRange(transform.position.x + (float)(user.rb.linearVelocityX * deltaTime), runTrajectory.x1, runTrajectory.x2, 0.0f, 1.0f);
 
             float xDir = Mathf.Sign(runTrajectory.x2 - runTrajectory.x1);
 
@@ -237,23 +245,21 @@ public class HiveAgent
 
     private void LinkTrajectories()
     {
-        Debug.Log("Start: " + startPlatform.toString());
-        Debug.Log("End: " + endPlatform.toString());
-        Debug.Log("Jumps: " + edges.Count);
-        hiveDrawingTools.HighlightPlatform(startPlatform, (_) => new Color(0.0f, 1.0f, 0.0f, 1.0f));
-        hiveDrawingTools.HighlightPlatform(endPlatform, (_) => new Color(0.0f, 0.0f, 1.0f, 1.0f));
+        //Debug.Log("Start: " + startPlatform.toString());
+        //Debug.Log("End: " + endPlatform.toString());
+        //Debug.Log("Jumps: " + edges.Count);
+        //hiveDrawingTools.HighlightPlatform(startPlatform, (_) => new Color(0.0f, 1.0f, 0.0f, 1.0f));
+        //hiveDrawingTools.HighlightPlatform(endPlatform, (_) => new Color(0.0f, 0.0f, 1.0f, 1.0f));
 
-        for (int i = 0; i < edges.Count; i++)
-        {
-            Edge edge = edges[i];
-            Debug.Log("Jump " + i + ": " + edge.Tag.world.toString());
-        }
+        //for (int i = 0; i < edges.Count; i++)
+        //{
+        //    Edge edge = edges[i];
+        //    Debug.Log("Jump " + i + ": " + edge.Tag.world.toString());
+        //}
 
-        foreach (Edge edge in edges)
-        {
-            hiveDrawingTools.DrawJumpTrajectory(edge.Tag.tilemap, edge.Tag.world, attributes);
-        }
+        
 
+        trajectories.Clear();
         jumpTrajectories.Clear();
         runTrajectories.Clear();
 
@@ -283,10 +289,15 @@ public class HiveAgent
             y1 = edge.Tag.world.y2;
         }
 
-        foreach (RunTrajectory runTrajectory in runTrajectories)
-        {
-            hiveDrawingTools.DrawRunTrajectory(runTrajectory);
-        }
+        //foreach (RunTrajectory runTrajectory in runTrajectories)
+        //{
+        //    hiveDrawingTools.DrawRunTrajectory(runTrajectory);
+        //}
+
+        //foreach (Edge edge in edges)
+        //{
+        //    hiveDrawingTools.DrawJumpTrajectory(edge.Tag.tilemap, edge.Tag.world, attributes);
+        //}
     }
 
     private Platform GetCurrentPlatform()
@@ -300,7 +311,7 @@ public class HiveAgent
         Platform currentPlatform = null;
         foreach (Platform platform in platforms)
         {
-            if (platform.x1 > transform.position.x || platform.x2 < transform.position.x)
+            if (platform.x1 + 0.5f > transform.position.x + attributes.width / 2.0f || platform.x2 + 0.5f < transform.position.x - attributes.width / 2.0f)
             {
                 continue;
             }

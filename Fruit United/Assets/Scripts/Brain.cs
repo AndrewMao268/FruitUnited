@@ -177,28 +177,27 @@ public class Brain
             (platform0, platform1) = (platform1, platform0);
         }
 
-        float leftLedge = platform0.x1 - attributes.width / 2.0f;
-        float rightLedge = platform0.x2 + attributes.width / 2.0f;
+        // 0.01f is for slight errors in calculations
+        float leftLedge0 = platform0.x1 - attributes.width / 2.0f + 0.01f;
+        float rightLedge0 = platform0.x2 + attributes.width / 2.0f + 0.01f;
+
+        bool succeededForward = false;
+        bool succeededBackward = false;
 
         for (int j = 0; j < platform1.length; j++)
         {
-            x1 = leftLedge;
+            x1 = leftLedge0;
             y1 = platform0.start.y + 1.0f;
             x2 = platform1.start.x + j;
             y2 = platform1.start.y + 1.0f;
 
-            if (x1 != x2)
-            {
-                CreateTrajectory(false, x1, y1, x2, y2, platform0, platform1, ref graph);
-            }
+            succeededForward = succeededForward || CreateTrajectories(x1, y1, x2, y2, platform0, platform1, ref graph);
 
-            x1 = rightLedge;
+            x1 = rightLedge0;
 
-            if (x1 != x2)
-            {
-                CreateTrajectory(false, x1, y1, x2, y2, platform0, platform1, ref graph);
-            }
+            succeededForward = succeededForward || CreateTrajectories(x1, y1, x2, y2, platform0, platform1, ref graph);
         }
+
 
         for (int i = 0; i < platform0.length; i++)
         {
@@ -209,31 +208,44 @@ public class Brain
                 x2 = platform1.start.x + j;
                 y2 = platform1.start.y + 1.0f;
 
-                if (x1 != x2)
+                if (!succeededForward)
                 {
-                    CreateTrajectory(true, x1, y1, x2, y2, platform0, platform1, ref graph);
-                    CreateTrajectory(true, x2, y2, x1, y1, platform1, platform0, ref graph);
+                    succeededForward = succeededForward || CreateTrajectories(x1, y1, x2, y2, platform0, platform1, ref graph);
+                }
+                
+                if (!succeededBackward)
+                {
+                    succeededBackward = succeededBackward || CreateTrajectories(x2, y2, x1, y1, platform1, platform0, ref graph);
                 }
             }
         }
     }
 
-    private bool CreateTrajectory(bool jump, float x1, float y1, float x2, float y2, Platform platform0, Platform platform1, ref SurfaceGraph graph)
+    private bool CreateTrajectories(float x1, float y1, float x2, float y2, Platform platform0, Platform platform1, ref SurfaceGraph graph)
     {
-        if (y2 - y1 > attributes.jumpHeight)
+        for (float i = 0.0f; i <= attributes.jumpHeight; i++)
         {
-            return false;
+            if (CreateTrajectory(x1, y1, x2, y2, i, platform0, platform1, ref graph))
+            {
+                return true;
+            }
         }
 
-        JumpTrajectory tilemapTrajectory;
-        if (jump)
-        {
-            tilemapTrajectory = GenerateJumpTrajectory(x1, y1, x2, y2, platform0, platform1);
-        }
-        else
-        {
-            tilemapTrajectory = GenerateFallTrajectory(x1, y1, x2, y2, platform0, platform1);
-        }
+        return false;
+
+        //if (jump)
+        //{
+        //    return CreateTrajectory(x1, y1, x2, y2, attributes.jumpHeight, platform0, platform1, ref graph);
+        //}
+        //else
+        //{
+        //    return CreateTrajectory(x1, y1, x2, y2, 0.0f, platform0, platform1, ref graph);
+        //}
+    }
+
+    private bool CreateTrajectory(float x1, float y1, float x2, float y2, float jumpHeight, Platform platform0, Platform platform1, ref SurfaceGraph graph)
+    {
+        JumpTrajectory tilemapTrajectory = GenerateJumpTrajectory(x1, y1, x2, y2, jumpHeight, platform0, platform1);
 
         if (!VerifyTrajectory(tilemapTrajectory, platform0, platform1))
         {
@@ -248,15 +260,7 @@ public class Brain
         x2 = worldPos2.x;
         y2 = worldPos2.y;
 
-        JumpTrajectory worldTrajectory;
-        if (jump)
-        {
-            worldTrajectory = GenerateJumpTrajectory(x1, y1, x2, y2, platform0, platform1);
-        }
-        else
-        {
-            worldTrajectory = GenerateFallTrajectory(x1, y1, x2, y2, platform0, platform1);
-        }
+        JumpTrajectory worldTrajectory = GenerateJumpTrajectory(x1, y1, x2, y2, jumpHeight, platform0, platform1);
 
         tilemapTrajectories.Add(tilemapTrajectory);
         worldTrajectories.Add(worldTrajectory);
@@ -270,9 +274,22 @@ public class Brain
         return true;
     }
 
-    private JumpTrajectory GenerateJumpTrajectory(float x1, float y1, float x2, float y2, Platform platform0, Platform platform1)
+    private JumpTrajectory GenerateJumpTrajectory(float x1, float y1, float x2, float y2, float jumpHeight, Platform platform0, Platform platform1)
     {
-        float k = y1 + attributes.jumpHeight;
+        float k = y1 + jumpHeight;
+
+        if (jumpHeight == 0.0f)
+        {
+            float h = x1;
+
+            float a = (y2 - k) / (Mathf.Pow(x2, 2.0f) - 2.0f * h * x2 + Mathf.Pow(h, 2.0f));
+            float b = -2.0f * a * h;
+            float c = a * Mathf.Pow(h, 2.0f) + k;
+
+            float idealSpeed = Mathf.Sqrt(attributes.jumpA / a);
+
+            return new JumpTrajectory(a, b, c, x1, y1, x2, y2, jumpHeight, platform0, platform1, idealSpeed);
+        }
 
         float d = y1 - y2;
 
@@ -292,8 +309,8 @@ public class Brain
 
         //if (float.IsNaN(a1) || float.IsNaN(a2))
         //{
-        //    string debugStr = "X1: " + x1 + " Y1: " + y1 + " X2: " + x2 + " Y2: " + y2;
-        //    debugStr += "\n" + " D: " + d + " F: " + f + " G: " + g + " H1: " + h1 + " H2: " + h2;
+        //    string debugStr = "X1: " + x1 + " Y1: " + y1 + " X2: " + x2 + " Y2: " + y2 + " Jump Height: " + jumpHeight;
+        //    debugStr += "\n" + "D: " + d + " F: " + f + " G: " + g + " H1: " + h1 + " H2: " + h2;
         //    Debug.Log(debugStr);
         //}
 
@@ -308,30 +325,32 @@ public class Brain
 
         if (h1 >= x1 && h1 <= x2)
         {
-            return new JumpTrajectory(a1, b1, c1, x1, y1, x2, y2, platform0, platform1, idealSpeed1);
+            return new JumpTrajectory(a1, b1, c1, x1, y1, x2, y2, jumpHeight, platform0, platform1, idealSpeed1);
         }
         else
         {
-            return new JumpTrajectory(a2, b2, c2, x1, y1, x2, y2, platform0, platform1, idealSpeed2);
+            return new JumpTrajectory(a2, b2, c2, x1, y1, x2, y2, jumpHeight, platform0, platform1, idealSpeed2);
         }
     }
-    private JumpTrajectory GenerateFallTrajectory(float x1, float y1, float x2, float y2, Platform platform0, Platform platform1)
-    {
-        float h = x1;
-        float k = y1;
-
-        float a = (y2 - k) / (Mathf.Pow(x2, 2.0f) - 2.0f * h * x2 + Mathf.Pow(h, 2.0f));
-        float b = -2.0f * a * h;
-        float c = a * Mathf.Pow(h, 2.0f) + k;
-
-        float idealSpeed = Mathf.Sqrt(attributes.jumpA / a);
-
-        return new JumpTrajectory(a, b, c, x1, y1, x2, y2, platform0, platform1, idealSpeed);
-    }
-
+    
     private bool VerifyTrajectory(JumpTrajectory trajectory, Platform platform0, Platform platform1)
     {
-        if (2.0f * Mathf.Abs(trajectory.a) < attributes.minAccel)
+        if (trajectory.x1 == trajectory.x2)
+        {
+            return false;
+        }
+
+        if (trajectory.y2 - trajectory.y1 > trajectory.jumpHeight)
+        {
+            return false;
+        }
+
+        if (trajectory.jumpHeight == 0.0f && trajectory.y2 - trajectory.y1 == trajectory.jumpHeight)
+        {
+            return false;
+        }
+
+        if (trajectory.idealSpeed > attributes.maxSpeed)
         {
             return false;
         }

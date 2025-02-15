@@ -11,13 +11,15 @@ public class JumpTrajectory : Trajectory
     public float x2;
     public float y2;
 
+    public float jumpHeight;
+
     Platform startPlatform;
     Platform endPlatform;
 
     public float idealSpeed;
     public int id;
 
-    public JumpTrajectory(float a, float b, float c, float x1, float y1, float x2, float y2, Platform startPlatform, Platform endPlatform, float idealSpeed)
+    public JumpTrajectory(float a, float b, float c, float x1, float y1, float x2, float y2, float jumpHeight, Platform startPlatform, Platform endPlatform, float idealSpeed)
     {
         this.a = a;
         this.b = b;
@@ -25,6 +27,8 @@ public class JumpTrajectory : Trajectory
 
         this.x1 = x1; this.y1 = y1;
         this.x2 = x2; this.y2 = y2;
+
+        this.jumpHeight = jumpHeight;
 
         this.startPlatform = startPlatform;
         this.endPlatform = endPlatform;
@@ -40,6 +44,6 @@ public class JumpTrajectory : Trajectory
 
     public string toString()
     {
-        return "A: " + this.a + " B: " + this.b + " C: " + this.c + " X1: " + this.x1 + " Y1: " + this.y1 + " X2: " + this.x2 + " Y2: " + this.y2 + " ID: " + this.id;
+        return "A: " + this.a + " B: " + this.b + " C: " + this.c + " X1: " + this.x1 + " Y1: " + this.y1 + " X2: " + this.x2 + " Y2: " + this.y2 + " Jump Height: " + jumpHeight + " ID: " + this.id;
     }
 }
