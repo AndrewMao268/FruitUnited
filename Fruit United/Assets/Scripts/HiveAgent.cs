@@ -108,15 +108,16 @@ public class HiveAgent
             }
             JumpTrajectory nextTrajectory = (JumpTrajectory)trajectories[currentTrajectoryIndex + 1];
 
-            float progress = mapRange(transform.position.x + (float)(user.rb.linearVelocityX * deltaTime), runTrajectory.x1, runTrajectory.x2, 0.0f, 1.0f);
 
-            float xDir = Mathf.Sign(runTrajectory.x2 - runTrajectory.x1);
+
+            //float xDir = Mathf.Sign(runTrajectory.x2 - runTrajectory.x1);
+            float xDir = Mathf.Sign(runTrajectory.x2 - transform.position.x);
 
             float velocity = (float)((transform.position.x - previousXPos) / deltaTime);
             currentRBVelocity = user.rb.linearVelocityX;
             previousXPos = transform.position.x;
             
-            if (progress < 0.8f)
+            if (Mathf.Abs(runTrajectory.x2 - transform.position.x) > 1.0f)
             {
                 if (Mathf.Abs(user.rb.linearVelocityX) < user.maxSpeedX)
                 {
@@ -140,6 +141,8 @@ public class HiveAgent
                     }
                 }
             }
+
+            float progress = mapRange(transform.position.x + (float)(user.rb.linearVelocityX * deltaTime), runTrajectory.x1, runTrajectory.x2, 0.0f, 1.0f);
 
             if (progress > 1.0f)
             {
@@ -273,6 +276,7 @@ public class HiveAgent
             float y2 = edge.Tag.world.y1;
 
             RunTrajectory worldTrajectory = new RunTrajectory(x1, y1, x2, y2);
+
             runTrajectories.Add(worldTrajectory);
             trajectories.Add(worldTrajectory);
             runTrajectoryIndices.Add(trajectoryIndex);
