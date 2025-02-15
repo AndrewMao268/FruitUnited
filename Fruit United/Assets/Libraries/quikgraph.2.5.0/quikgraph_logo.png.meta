@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      quikgraph_logo_0: -1744787266531016659
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

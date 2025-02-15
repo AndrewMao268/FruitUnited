@@ -17439,7 +17439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d34a42c9243ac00479e8ce48ea74e931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followObject: {fileID: 1107810124}
+  followObject: {fileID: 1989154597}
   speed: 0.1
 --- !u!114 &2008563272
 MonoBehaviour:
