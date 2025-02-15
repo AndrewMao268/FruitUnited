@@ -178,8 +178,8 @@ public class Brain
         }
 
         // 0.01f is for slight errors in calculations
-        float leftLedge0 = platform0.x1 - attributes.width / 2.0f + 0.01f;
-        float rightLedge0 = platform0.x2 + attributes.width / 2.0f + 0.01f;
+        float leftLedge0 = platform0.x1 - attributes.width / 2.0f;
+        float rightLedge0 = platform0.x2 + attributes.width / 2.0f;
 
         bool succeededForward = false;
         bool succeededBackward = false;
@@ -223,7 +223,7 @@ public class Brain
 
     private bool CreateTrajectories(float x1, float y1, float x2, float y2, Platform platform0, Platform platform1, ref SurfaceGraph graph)
     {
-        for (float i = 0.0f; i <= attributes.jumpHeight; i++)
+        for (float i = 0.0f; i <= attributes.jumpHeight; i += 0.5f)
         {
             if (CreateTrajectory(x1, y1, x2, y2, i, platform0, platform1, ref graph))
             {
@@ -356,8 +356,8 @@ public class Brain
         }
 
         List<Vector3Int> crossedTiles = CrawlTrajectory(trajectory);
-        crossedTiles.Remove(new Vector3Int(Mathf.RoundToInt(trajectory.x1), Mathf.RoundToInt(trajectory.y1), 0));
-        crossedTiles.Remove(new Vector3Int(Mathf.RoundToInt(trajectory.x2), Mathf.RoundToInt(trajectory.y2), 0));
+        //crossedTiles.Remove(new Vector3Int(Mathf.RoundToInt(trajectory.x1), Mathf.RoundToInt(trajectory.y1), 0));
+        //crossedTiles.Remove(new Vector3Int(Mathf.RoundToInt(trajectory.x2), Mathf.RoundToInt(trajectory.y2), 0));
 
         bool spaceFree = true;
         foreach (Vector3Int crossedTile in crossedTiles)
