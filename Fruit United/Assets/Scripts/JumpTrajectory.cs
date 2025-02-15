@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class JumpTrajectory
+public class JumpTrajectory : Trajectory
 {
     public float a;
     public float b;
@@ -13,9 +13,11 @@ public class JumpTrajectory
 
     Platform startPlatform;
     Platform endPlatform;
+
+    public float idealSpeed;
     public int id;
 
-    public JumpTrajectory(float a, float b, float c, float x1, float y1, float x2, float y2, Platform startPlatform, Platform endPlatform)
+    public JumpTrajectory(float a, float b, float c, float x1, float y1, float x2, float y2, Platform startPlatform, Platform endPlatform, float idealSpeed)
     {
         this.a = a;
         this.b = b;
@@ -28,6 +30,12 @@ public class JumpTrajectory
         this.endPlatform = endPlatform;
 
         this.id = (int)((int)a * 23974987 + (int)b * 983475954352 + (int)c * 293748923423427);
+        this.idealSpeed = idealSpeed;
+    }
+
+    public float plugIn(float x)
+    {
+        return a * Mathf.Pow(x, 2.0f) + b * x + c;
     }
 
     public string toString()
