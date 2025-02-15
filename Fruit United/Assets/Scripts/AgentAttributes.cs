@@ -4,7 +4,7 @@ public class AgentAttributes
     public float width = 0.3f;
 
     public float jumpHeight = 3.0f;
-    public float minAccel = 1.0f;
+    public float maxSpeed = 10.0f;
     public float jumpA = -4.89161183078935f;
     public float jumpB = 7.71168716787364f;
 
@@ -14,16 +14,16 @@ public class AgentAttributes
         this.width = 1.0f;
 
         this.jumpHeight = 3.0f;
-        this.minAccel = 10.0f;
+        this.maxSpeed = 10.0f;
         this.jumpA = -5.0f;
         this.jumpB = 8.0f;
     }
-    public AgentAttributes(float height, float width, float jumpHeight, float minAccel, float jumpA, float jumpB)
+    public AgentAttributes(float height, float width, float jumpHeight, float maxSpeed, float jumpA, float jumpB)
     {
         this.height = height;
         this.width = width;
         this.jumpHeight = jumpHeight;
-        this.minAccel = minAccel;
+        this.maxSpeed = maxSpeed;
         this.jumpA = jumpA;
         this.jumpB = jumpB;
     }
@@ -35,7 +35,7 @@ public class AgentAttributes
         return this.height == other.height &&
             this.width == other.width &&
             this.jumpHeight == other.jumpHeight &&
-            this.minAccel == other.minAccel &&
+            this.maxSpeed == other.maxSpeed &&
             this.jumpA == other.jumpA &&
             this.jumpB == other.jumpB;
     }
