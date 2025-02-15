@@ -260,7 +260,7 @@ public class HiveAgent
         //    Debug.Log("Jump " + i + ": " + edge.Tag.world.toString());
         //}
 
-        
+
 
         trajectories.Clear();
         jumpTrajectories.Clear();
