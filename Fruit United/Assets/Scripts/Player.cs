@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using System.Diagnostics;
+using System.IO;
 
 
 public class Player : MonoBehaviour
@@ -34,6 +36,10 @@ public class Player : MonoBehaviour
     public float jumpImpulse = 4.0f;
 
     private GameObject targetObject;
+
+    private Stopwatch stopwatch;
+    private string recordX;
+    private string recordY;
     
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -43,6 +49,11 @@ public class Player : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         rb = GetComponent<Rigidbody2D>();
         grounded = false;
+        stopwatch = new Stopwatch();
+        stopwatch.Restart();
+
+        recordX = "";
+        recordY = "";
     }
 
     private void Update()
@@ -83,7 +94,30 @@ public class Player : MonoBehaviour
         if (moveValue.y == 1.0f && grounded && previousGround)
         {
             rb.AddForce(new Vector2(0, jumpImpulse), ForceMode2D.Impulse);
+            stopwatch.Restart();
+            recordX = "";
+            recordY = "";
             return;
+        }
+
+        if (!grounded)
+        {
+            recordX += stopwatch.Elapsed.TotalSeconds + ", ";
+            recordY += transform.position.y + ", ";
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            DateTime currentTime = DateTime.UtcNow;
+            long unixTime = ((DateTimeOffset)currentTime).ToUnixTimeSeconds();
+
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "MysteriousText" + unixTime + ".txt"), false))
+            {
+                outputFile.WriteLine(recordX);
+                outputFile.WriteLine(recordY);
+            }
         }
 
         // Moving X
