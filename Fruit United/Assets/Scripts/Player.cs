@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
 {
 
     Rigidbody2D rb;
-    bool grounded;
+    
     public float jumpHeight = 4.0f;
     public float xSpeed = 7.0f;
 
@@ -26,8 +26,6 @@ public class Player : MonoBehaviour
 
     public CapsuleCollider2D capsuleCollider2D;
 
-    public Transform feet;
-    public LayerMask groundLayer;
     public float capsuleX = 1.5f;
     public float capsuleY = 0.5f;
 
@@ -67,7 +65,6 @@ public class Player : MonoBehaviour
     {
         // Check if feet box is touching the tilemap
         grounded = Physics2D.OverlapCapsule(feet.position, new Vector2(capsuleX, capsuleY), CapsuleDirection2D.Horizontal, 0, groundLayer);
-        Debug.Log(grounded);
 
         // -0.255483, -2.785763
         // 1.827254, 0.8648027

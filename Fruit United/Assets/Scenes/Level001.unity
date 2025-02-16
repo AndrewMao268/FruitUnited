@@ -26725,7 +26725,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 817246607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcdce87d84ee9be439f28e8c2d6ceb2a, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f1a1fd920d24a041b45343d7187b08c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mainSlider: {fileID: 817246610}
@@ -29900,6 +29900,7 @@ Transform:
   - {fileID: 508291927}
   - {fileID: 918758157}
   - {fileID: 216227498}
+  - {fileID: 546697688}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1989154602
@@ -29914,13 +29915,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d5eb449020cb5f44939b78be4ee070e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xAccel: 7
-  maxSpeedX: 10
-  capsuleCollider2D: {fileID: 216227499}
+  jumpHeight: 4
+  xSpeed: 7
   feet: {fileID: 508291927}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  xAccel: 7
+  maxSpeedX: 10
+  capsuleCollider2D: {fileID: 216227499}
   capsuleX: 0.20094
   capsuleY: 0.3134254
   jumpImpulse: 4
@@ -29962,7 +29965,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.925, y: 1.725}
+    oldSize: {x: 3.84, y: 6.18}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
