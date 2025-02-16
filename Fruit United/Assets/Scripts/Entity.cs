@@ -54,7 +54,8 @@ public class Entity : MonoBehaviour
             return;
         }
 
-        rb.AddForce(new Vector2(moveValue.x * xSpeed, 0.0f), ForceMode2D.Force);
+        if (!grounded)
+            rb.AddForce(new Vector2(moveValue.x * xSpeed, 0.0f), ForceMode2D.Force);
     }
 
     void OnCollisionEnter2D(Collision2D collision2D)

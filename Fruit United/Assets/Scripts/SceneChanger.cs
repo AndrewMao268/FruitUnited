@@ -5,7 +5,7 @@ public class TileScroller : MonoBehaviour
 {
 
     public void ChangeScene() {
-        //SceneManager.LoadScene("CharacterSelection");
+        SceneManager.LoadScene("CharacterSelection");
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Fruit United/Assets/Manual/SampleScene.unity.meta
 guid: c103ec2d67f535a4fab4d639c7fc004d
+========
+guid: 69fa373aa1f6c624590b6bd6784a5e6f
+>>>>>>>> origin/merge_animation:Fruit United/Assets/Scenes/SampleScene.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

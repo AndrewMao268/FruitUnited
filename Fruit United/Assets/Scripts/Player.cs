@@ -19,14 +19,29 @@ public class Player : MonoBehaviour
 
     private float pressingHorizontal = 0.0f;
     private float pressingVertical = 0.0f;
+    private float lastHorizontal = 0.0f;
 
-    public float sizeScale = 0.2f;
+    public float xAccel = 7.0f;
+    public float maxSpeedX = 10.0f;
+
+    public CapsuleCollider2D capsuleCollider2D;
+
+    public Transform feet;
+    public LayerMask groundLayer;
     public float capsuleX = 1.5f;
     public float capsuleY = 0.5f;
 
+    private bool grounded;
+    private bool previousGround = false;
+    public float jumpImpulse = 4.0f;
+
+    private GameObject targetObject;
+    
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        capsuleCollider2D = GetComponentInChildren<CapsuleCollider2D>();
         DontDestroyOnLoad(gameObject);
         rb = GetComponent<Rigidbody2D>();
         grounded = false;
@@ -34,17 +49,23 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (pressingHorizontal >= 0.0f)
-            transform.localScale = new Vector2(-sizeScale, sizeScale);
+        if (lastHorizontal > 0.0f)
+        {
+            //attack "sword" collider
+            capsuleCollider2D.offset = new Vector2(-0.5f, capsuleCollider2D.offset.y);
+            transform.localScale = new Vector2(-Math.Abs(transform.localScale.x), Math.Abs(transform.localScale.y));
+        }
         else
-            transform.localScale = new Vector2(sizeScale, sizeScale);
+        {
+            capsuleCollider2D.offset = new Vector2(-0.4f, capsuleCollider2D.offset.y);
+            transform.localScale = new Vector2(Math.Abs(transform.localScale.x), Math.Abs(transform.localScale.y));
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        // check if feet box is touching the tilemap
-        // grounded = transform.Find("Feet").gameObject.GetComponent<BoxCollider2D>().IsTouching(GameObject.Find("TilemapGround").gameObject.GetComponent<TilemapCollider2D>());
+        // Check if feet box is touching the tilemap
         grounded = Physics2D.OverlapCapsule(feet.position, new Vector2(capsuleX, capsuleY), CapsuleDirection2D.Horizontal, 0, groundLayer);
         Debug.Log(grounded);
 
@@ -56,26 +77,79 @@ public class Player : MonoBehaviour
         Vector2 moveValue = InputSystem.actions.FindAction("Move").ReadValue<Vector2>();
         pressingHorizontal = moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Math.Abs(moveValue.x);
         pressingVertical = moveValue.y = moveValue.y == 0.0f ? 0.0f : moveValue.y / Math.Abs(moveValue.y);
+        if (pressingHorizontal != 0.0f)
+        {
+            lastHorizontal = pressingHorizontal;
+        }
 
         // Moving Y
-        if (moveValue.y == 1.0f && grounded) {
-            rb.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
+        if (moveValue.y == 1.0f && grounded && previousGround)
+        {
+            rb.AddForce(new Vector2(0, jumpImpulse), ForceMode2D.Impulse);
             return;
         }
 
         // Moving X
-        rb.AddForce(new Vector2(moveValue.x * xSpeed, 0.0f), ForceMode2D.Force);
+        if (Math.Abs(rb.linearVelocityX) < maxSpeedX)
+        {
+            rb.AddForce(new Vector2(moveValue.x * xAccel, 0.0f), ForceMode2D.Force);
+        }
+
+        previousGround = grounded;
+
+
+        //early in development attacking
+        if (targetObject != null && Input.GetKeyDown(KeyCode.F))
+            {
+                Destroy(targetObject);
+                targetObject = null;
+            }
     }
 
-    void OnCollisionEnter2D(Collision2D collision2D) {
-        // A special commit from Brandon
-        //if (collision2D.gameObject.name == "Soldier(Clone)" || collision2D.gameObject.name == "Soldier") {
-        //    transform.position = new Vector2(0.0f, 4.0f);
-        //}
-
-        if (collision2D.gameObject.name == "Portal") {
+    void OnCollisionEnter2D(Collision2D collision2D)
+    {
+        if (collision2D.gameObject.name == "Portal")
+        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             transform.position = new Vector2(0.0f, 4.0f);
         }
     }
+
+    //early in development attacking
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.CompareTag("Soldiers"))
+        {
+            targetObject = col.gameObject;
+        }
+    }
+
+    public bool IsGrounded
+    {
+        get => grounded;
+    }
+    public float XSpeed
+    {
+        get => Mathf.Abs(rb.linearVelocity.x);
+    }
 }
+
+
+
+
+
+// OLD ANIMATION SCRIPT THAT FAILED. SAVED IF NEEDED
+/* if (moveValue.x != 0 || moveValue.y != 0)
+        {
+            animator.SetFloat("X", moveValue.x);
+            animator.SetFloat("Y", moveValue.y);
+
+            animator.SetBool("IsWalking", true);
+            spriteRenderer.sprite = spriteTest;
+             
+        } else
+        {
+            animator.SetBool("IsWalking", false);
+            spriteRenderer.sprite = spriteTest;
+        }
+        */
