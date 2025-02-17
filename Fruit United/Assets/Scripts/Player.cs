@@ -106,19 +106,19 @@ public class Player : MonoBehaviour
             recordY += transform.position.y + ", ";
         }
 
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        //if (Input.GetKeyDown(KeyCode.F))
+        //{
+        //    string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            DateTime currentTime = DateTime.UtcNow;
-            long unixTime = ((DateTimeOffset)currentTime).ToUnixTimeSeconds();
+        //    DateTime currentTime = DateTime.UtcNow;
+        //    long unixTime = ((DateTimeOffset)currentTime).ToUnixTimeSeconds();
 
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "MysteriousText" + unixTime + ".txt"), false))
-            {
-                outputFile.WriteLine(recordX);
-                outputFile.WriteLine(recordY);
-            }
-        }
+        //    using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "MysteriousText" + unixTime + ".txt"), false))
+        //    {
+        //        outputFile.WriteLine(recordX);
+        //        outputFile.WriteLine(recordY);
+        //    }
+        //}
 
         // Moving X
         if (Math.Abs(rb.linearVelocityX) < maxSpeedX)
@@ -130,11 +130,11 @@ public class Player : MonoBehaviour
 
 
         //early in development attacking
-        if (targetObject != null && Input.GetKeyDown(KeyCode.F))
-            {
-                Destroy(targetObject);
-                targetObject = null;
-            }
+        //if (targetObject != null && Input.GetKeyDown(KeyCode.F))
+        //{
+        //    Destroy(targetObject);
+        //    targetObject = null;
+        //}
     }
 
     void OnCollisionEnter2D(Collision2D collision2D)

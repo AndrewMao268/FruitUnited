@@ -30821,6 +30821,7 @@ GameObject:
   - component: {fileID: 646251697}
   - component: {fileID: 646251696}
   - component: {fileID: 646251695}
+  - component: {fileID: 646251699}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -30972,6 +30973,21 @@ Transform:
   - {fileID: 1477512557}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &646251699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646251694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e7810d239a41614c9d1a317cbef3471, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1989154597}
+  interactionText: {fileID: 1788483277}
+  interactionDistance: 5
 --- !u!1 &665044604
 GameObject:
   m_ObjectHideFlags: 0
@@ -34344,7 +34360,7 @@ GameObject:
   - component: {fileID: 1788483280}
   - component: {fileID: 1788483279}
   m_Layer: 5
-  m_Name: InteractionKey (TMP)
+  m_Name: InteractionText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
