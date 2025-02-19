@@ -1,15 +1,31 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
     public GameObject player;
     public GameObject interactionText;
+    public GameObject npcDialogueObject;
+
+    private bool dialogueSetup;
+    private NPCDialogueData dialogueData;
+    private NPCDialogue npcDialogue;
+    private int npcDialogueId;
 
     public float interactionDistance;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        npcDialogue = npcDialogueObject.GetComponent<NPCDialogue>();
+
+        List<string> dialogueList = new List<string>();
+        dialogueList.Add("I am an NPC!");
+
+        dialogueData = new NPCDialogueData(dialogueList);
+
+        npcDialogueId = npcDialogue.RegisterNPC(dialogueData);
+
+        dialogueSetup = true;
     }
 
     // Update is called once per frame
@@ -40,6 +56,6 @@ public class NPC : MonoBehaviour
 
     private void ShowDialogue()
     {
-        Debug.Log("Dialogue!");
+        npcDialogue.ShowDialogue(npcDialogueId);
     }
 }
