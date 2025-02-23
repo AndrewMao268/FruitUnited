@@ -40,6 +40,7 @@ public class Player : MonoBehaviour
     private Stopwatch stopwatch;
     private string recordX;
     private string recordY;
+
     
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -141,10 +142,35 @@ public class Player : MonoBehaviour
     {
         if (collision2D.gameObject.name == "Portal")
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            
             transform.position = new Vector2(0.0f, 4.0f);
+
+            GameObject gridObject = GameObject.Find("Grid"); // Find the Grid GameObject
+            Transform targetTilemap = gridObject.transform.Find("LeftBarrier");
+            TilemapRenderer tilemapRenderer = targetTilemap.GetComponent<TilemapRenderer>();
+            Rigidbody2D rigidbody2D = targetTilemap.GetComponent<Rigidbody2D>();
+            CompositeCollider2D compositeCollider2D = targetTilemap.GetComponent<CompositeCollider2D>();
+            TilemapCollider2D tilemapCollider2D = targetTilemap.GetComponent<TilemapCollider2D>();
+
+            if (tilemapRenderer != null)
+            {
+                tilemapCollider2D.enabled = false;
+                tilemapRenderer.enabled = false;
+            }
+
+            if (rigidbody2D != null)
+            {
+                Destroy(compositeCollider2D);
+                Destroy(rigidbody2D); 
+
+            }
         }
+ 
     }
+    
+        
+    
 
     //early in development attacking
     void OnTriggerEnter2D(Collider2D col)
