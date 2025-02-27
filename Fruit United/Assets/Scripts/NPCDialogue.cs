@@ -30,12 +30,12 @@ public class NPCDialogue : MonoBehaviour
     {
         int id = nextNPCId++;
 
-        npcDatas.Add(npcData);
+//        npcDatas.Add(npcData);
         // TODO: Write instantiate function that resizes text boxes accordingly for
         // simultaneous dialogues
         GameObject newTextBox = Instantiate(textBox, transform);
-        textBoxes.Add(newTextBox);
-        npcAgents.Add(new NPCDialogueAgent(newTextBox, npcData));
+//        textBoxes.Add(newTextBox);
+   //     npcAgents.Add(new NPCDialogueAgent(newTextBox, npcData));
 
         return id;
     }

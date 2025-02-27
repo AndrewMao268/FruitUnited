@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Soldiers
+  - NPC
   layers:
   - Default
   - TransparentFX
@@ -33,9 +34,38 @@ TagManager:
   - 
   - 
   - 
+  - 
+  - 
+  - 
+  - 
+  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Sky
+    uniqueID: 2296292661
+    locked: 0
+  - name: Cloud
+    uniqueID: 3527636501
+    locked: 0
+  - name: Farvegetation
+    uniqueID: 3339666489
+    locked: 0
+  - name: Tree
+    uniqueID: 548217541
+    locked: 0
+  - name: CloseVegetation
+    uniqueID: 307660775
+    locked: 0
+  - name: BigTree
+    uniqueID: 3225148953
+    locked: 0
+  - name: Closest Vegetation
+    uniqueID: 2056823971
+    locked: 0
+  - name: Player
+    uniqueID: 705577343
     locked: 0
   m_RenderingLayers:
   - Default

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c75825c6124d7640ae295370c73593d, type: 3}
+  m_Name: goToPortalMan
+  m_EditorClassIdentifier: 
+  npcName: Portal Man
+  npcPortrait: {fileID: -8173353090802019188, guid: 7b00e4775eb588941ae6d4d3c2d773f7, type: 3}
+  dialogueLines:
+  - You did it!
+  - Legend has it whoever enters the mysterious blue portal opens up a secret behind
+    these rocky mountains...
+  - You did it!
+  autoProgressLines: 010000
+  autoProgressDelay: 1.5
+  typingSpeed: 0.05

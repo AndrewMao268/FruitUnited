@@ -41,6 +41,10 @@ public class Player : MonoBehaviour
     private string recordX;
     private string recordY;
 
+    public string newFirstLine = "You found it!";
+
+    public Npcbrandontestscript npcbrandontestscript;
+
     
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -153,6 +157,9 @@ public class Player : MonoBehaviour
             CompositeCollider2D compositeCollider2D = targetTilemap.GetComponent<CompositeCollider2D>();
             TilemapCollider2D tilemapCollider2D = targetTilemap.GetComponent<TilemapCollider2D>();
 
+
+            npcbrandontestscript.ChangeFirstDialogue(newFirstLine);
+
             if (tilemapRenderer != null)
             {
                 tilemapCollider2D.enabled = false;
@@ -166,6 +173,8 @@ public class Player : MonoBehaviour
 
             }
         }
+
+        
  
     }
     
