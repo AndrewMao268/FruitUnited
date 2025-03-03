@@ -1,11 +1,10 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
-using System.Diagnostics;
 using System.IO;
+using System.Collections.Generic;
 
 
 public class Player : MonoBehaviour
@@ -37,7 +36,7 @@ public class Player : MonoBehaviour
 
     private GameObject targetObject;
 
-    private Stopwatch stopwatch;
+    private System.Diagnostics.Stopwatch stopwatch;
     private string recordX;
     private string recordY;
 
@@ -45,6 +44,7 @@ public class Player : MonoBehaviour
 
     public Npcbrandontestscript npcbrandontestscript;
 
+    private List<int> inventoryStorage;
     
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -54,11 +54,17 @@ public class Player : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         rb = GetComponent<Rigidbody2D>();
         grounded = false;
-        stopwatch = new Stopwatch();
+        stopwatch = new System.Diagnostics.Stopwatch();
         stopwatch.Restart();
 
         recordX = "";
         recordY = "";
+
+        inventoryStorage = new List<int>();
+        for (int i = 0; i < 27; i++)
+        {
+            inventoryStorage.Add(0);
+        }
     }
 
     private void Update()
@@ -67,12 +73,12 @@ public class Player : MonoBehaviour
         {
             //attack "sword" collider
             capsuleCollider2D.offset = new Vector2(-0.5f, capsuleCollider2D.offset.y);
-            transform.localScale = new Vector2(-Math.Abs(transform.localScale.x), Math.Abs(transform.localScale.y));
+            transform.localScale = new Vector2(-Mathf.Abs(transform.localScale.x), Mathf.Abs(transform.localScale.y));
         }
         else
         {
             capsuleCollider2D.offset = new Vector2(-0.4f, capsuleCollider2D.offset.y);
-            transform.localScale = new Vector2(Math.Abs(transform.localScale.x), Math.Abs(transform.localScale.y));
+            transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), Mathf.Abs(transform.localScale.y));
         }
     }
 
@@ -88,8 +94,8 @@ public class Player : MonoBehaviour
 
         // Moving
         Vector2 moveValue = InputSystem.actions.FindAction("Move").ReadValue<Vector2>();
-        pressingHorizontal = moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Math.Abs(moveValue.x);
-        pressingVertical = moveValue.y = moveValue.y == 0.0f ? 0.0f : moveValue.y / Math.Abs(moveValue.y);
+        pressingHorizontal = moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Mathf.Abs(moveValue.x);
+        pressingVertical = moveValue.y = moveValue.y == 0.0f ? 0.0f : moveValue.y / Mathf.Abs(moveValue.y);
         if (pressingHorizontal != 0.0f)
         {
             lastHorizontal = pressingHorizontal;
@@ -126,7 +132,7 @@ public class Player : MonoBehaviour
         //}
 
         // Moving X
-        if (Math.Abs(rb.linearVelocityX) < maxSpeedX)
+        if (Mathf.Abs(rb.linearVelocityX) < maxSpeedX)
         {
             rb.AddForce(new Vector2(moveValue.x * xAccel, 0.0f), ForceMode2D.Force);
         }
@@ -174,12 +180,28 @@ public class Player : MonoBehaviour
             }
         }
 
-        
+        if (collision2D.gameObject.name == "Sword" || collision2D.gameObject.name == "Sword(Clone)")
+        {
+            Destroy(collision2D.gameObject);
+            Item itemScript = collision2D.gameObject.GetComponent<Item>();
+            int itemID = itemScript.itemID;
+            inventoryStorage[itemID]++;
+
+            string inventoryString = "";
+            inventoryString += "I picked up a " + itemScript.GetItemName(itemID) + "!\n";
+            for (int i = 0; i < 4; i++)
+            {
+                inventoryString += "I have " + inventoryStorage[i] + " " + itemScript.GetItemName(i) + "s.\n";
+            }
+            Debug.Log(inventoryString);
+        }
  
     }
+
     
-        
-    
+
+
+
 
     //early in development attacking
     void OnTriggerEnter2D(Collider2D col)
