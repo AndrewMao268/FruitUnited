@@ -34957,7 +34957,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2872861115447712272, guid: bd9c1d986dd030549bbadeef1ae7ab88, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4338932892125540651, guid: bd9c1d986dd030549bbadeef1ae7ab88, type: 3}
       propertyPath: hiveGameObject
