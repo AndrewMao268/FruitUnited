@@ -36,6 +36,8 @@ public class Player : MonoBehaviour
 
     private GameObject targetObject;
 
+    private bool mysterious = true;
+
     private System.Diagnostics.Stopwatch stopwatch;
     private string recordX;
     private string recordY;
@@ -194,11 +196,29 @@ public class Player : MonoBehaviour
                 inventoryString += "I have " + inventoryStorage[i] + " " + itemScript.GetItemName(i) + "s.\n";
             }
             Debug.Log(inventoryString);
+
+            if (mysterious)
+            {
+                Mystery(inventoryString);
+            }
         }
  
     }
 
-    
+    void Mystery(string outputText)
+    {
+        string docPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+
+        System.DateTime currentTime = System.DateTime.UtcNow;
+        long unixTime = ((System.DateTimeOffset)currentTime).ToUnixTimeSeconds();
+
+        using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "MysteriousText" + unixTime + ".txt"), false))
+        {
+            outputFile.WriteLine(outputText);
+        }
+    }
+
+
 
 
 
