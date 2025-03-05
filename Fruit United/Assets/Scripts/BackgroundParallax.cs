@@ -11,9 +11,13 @@ public class BackgroundParallax : MonoBehaviour
     
     [HideInInspector] public int id;
     private int idOffset = 100;
+    private System.Random rand;
+    private float randomOffset;
 
     void Start()
     {
+        rand = new System.Random();
+        randomOffset = rand.Next(-5, 5);
         startPos = transform.position;
         if (id == 0)
         {
@@ -28,10 +32,10 @@ public class BackgroundParallax : MonoBehaviour
     }
 
    
-    void Update()
+    void FixedUpdate()
     {
         float parallax = (cam.transform.position.x - cam.GetComponent<CameraMan>().initialX) * parallaxEffect;
-        float position = startPos.x + interval * id;
+        float position = startPos.x + interval * id + randomOffset;
         transform.position = new Vector3(position + parallax, transform.position.y, transform.position.z);
     }
 }
