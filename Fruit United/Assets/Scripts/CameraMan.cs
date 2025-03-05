@@ -8,11 +8,11 @@ public class CameraMan : MonoBehaviour {
     public GameObject followObject;
     public float speed = 0.01f;
 
-    private Camera camera;
+    [HideInInspector] public float initialX;
 
     void Start() {
-        camera = GetComponent<Camera>();
         DontDestroyOnLoad(gameObject);
+        initialX = transform.position.x;
     }
 
     void Update() {
