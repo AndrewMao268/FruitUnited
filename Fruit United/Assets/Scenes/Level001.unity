@@ -286,7 +286,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &41702184
 RectTransform:
   m_ObjectHideFlags: 0
@@ -30708,7 +30708,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &231315596
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -30982,7 +30982,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &344246618
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -31394,7 +31394,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &372142033
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -31617,7 +31617,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &376136305
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -31719,7 +31719,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 2008563267}
+  interval: 20
   parallaxEffect: 0.5
+  id: 0
 --- !u!212 &421368560
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -31823,7 +31825,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 2008563267}
+  interval: 0
   parallaxEffect: 0.9
+  id: 0
 --- !u!212 &446487120
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -33264,7 +33268,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 2008563267}
-  parallaxEffect: 0.6
+  interval: 36
+  parallaxEffect: 0.4
+  id: 0
 --- !u!212 &782847904
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -33478,7 +33484,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &848492750
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -33879,7 +33885,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &869502928
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -34694,7 +34700,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1162886799
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -35002,7 +35008,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2872861115447712272, guid: bd9c1d986dd030549bbadeef1ae7ab88, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4338932892125540651, guid: bd9c1d986dd030549bbadeef1ae7ab88, type: 3}
       propertyPath: hiveGameObject
@@ -35613,7 +35619,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1389273043
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -35775,7 +35781,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1470604770
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -36369,7 +36375,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1488233157
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -36456,7 +36462,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1504819647
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -37225,7 +37231,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 2008563267}
+  interval: 36
   parallaxEffect: 0.4
+  id: 0
 --- !u!212 &1608034099
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -37552,7 +37560,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1714399848
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -37978,7 +37986,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1818960671
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -38312,7 +38320,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 2008563267}
+  interval: 36
   parallaxEffect: 0.8
+  id: 0
 --- !u!212 &1877196736
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -38401,7 +38411,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1880530675
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -38503,7 +38513,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 2008563267}
-  parallaxEffect: 0.7
+  interval: 25
+  parallaxEffect: 0.3
+  id: 0
 --- !u!212 &1964539653
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -39027,7 +39039,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 30
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -39072,6 +39084,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followObject: {fileID: 1989154597}
   speed: 0.01
+  initialX: 0
 --- !u!114 &2008563272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41047,7 +41060,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 2008563267}
+  interval: 36
   parallaxEffect: 1
+  id: 0
 --- !u!212 &2125308734
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -41554,8 +41569,8 @@ SceneRoots:
   - {fileID: 2125308735}
   - {fileID: 446487121}
   - {fileID: 1877196737}
-  - {fileID: 1964539654}
   - {fileID: 782847905}
+  - {fileID: 1964539654}
   - {fileID: 421368561}
   - {fileID: 1608034100}
   - {fileID: 1266916552}
