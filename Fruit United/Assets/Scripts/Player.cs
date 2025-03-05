@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
 
     private GameObject targetObject;
 
-    private bool mysterious = false;
+    private bool mysterious = true;
 
     private System.Diagnostics.Stopwatch stopwatch;
     private string recordX;
