@@ -165,8 +165,7 @@ public class Player : MonoBehaviour
             CompositeCollider2D compositeCollider2D = targetTilemap.GetComponent<CompositeCollider2D>();
             TilemapCollider2D tilemapCollider2D = targetTilemap.GetComponent<TilemapCollider2D>();
 
-
-            npcbrandontestscript.ChangeFirstDialogue(newFirstLine);
+            npcbrandontestscript.collidedWithPortal = true;
 
             if (tilemapRenderer != null)
             {

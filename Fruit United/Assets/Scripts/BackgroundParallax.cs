@@ -1,12 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BackgroundParallax : MonoBehaviour
 {
     
-
     private float startPos, length;
     public GameObject cam;
     public float parallaxEffect;
+    
+  
 
     void Start()
     {
@@ -21,6 +24,7 @@ public class BackgroundParallax : MonoBehaviour
         float movement = cam.transform.position.x * (1 - parallaxEffect);
 
         transform.position = new Vector3(startPos + distance, transform.position.y, transform.position.z);
+        
 
 
         if (movement > startPos + length)
