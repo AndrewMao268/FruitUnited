@@ -47,11 +47,15 @@ public class Player : MonoBehaviour
     public Npcbrandontestscript npcbrandontestscript;
 
     private List<int> inventoryStorage;
-    
-    
+
+    public GameObject inventory;
+
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        inventory.SetActive(false);
         capsuleCollider2D = GetComponentInChildren<CapsuleCollider2D>();
         DontDestroyOnLoad(gameObject);
         rb = GetComponent<Rigidbody2D>();
@@ -81,6 +85,11 @@ public class Player : MonoBehaviour
         {
             capsuleCollider2D.offset = new Vector2(-0.4f, capsuleCollider2D.offset.y);
             transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), Mathf.Abs(transform.localScale.y));
+        }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            // Toggle the active state of the inventory panel
+            inventory.SetActive(!inventory.activeSelf);
         }
     }
 
@@ -118,6 +127,10 @@ public class Player : MonoBehaviour
             recordX += stopwatch.Elapsed.TotalSeconds + ", ";
             recordY += transform.position.y + ", ";
         }
+
+        
+
+
 
         //if (Input.GetKeyDown(KeyCode.F))
         //{
