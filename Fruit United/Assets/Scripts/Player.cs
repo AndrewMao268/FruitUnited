@@ -47,6 +47,17 @@ public class Player : MonoBehaviour
     public Npcbrandontestscript npcbrandontestscript;
 
     private List<int> inventoryStorage;
+
+    public GameObject sword;
+    private Vector3 swordPosition;
+    private Quaternion swordRotation;
+    private bool swingingSword = false;
+    public float swordSpeed = 1.0f;
+    private float swordAngle = 0.0f;
+    public float maxSwordAngle = 120.0f;
+
+    public GameObject playerBody;
+    public GameObject swordPivot;
     
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -58,6 +69,11 @@ public class Player : MonoBehaviour
         grounded = false;
         stopwatch = new System.Diagnostics.Stopwatch();
         stopwatch.Restart();
+
+        Vector3 asp = sword.transform.localPosition;
+        swordPosition = new Vector3(asp.x, asp.y, asp.z);
+        Quaternion asr = sword.transform.rotation;
+        swordRotation = new Quaternion(asr.x, asr.y, asr.z, asr.w);
 
         recordX = "";
         recordY = "";
@@ -71,15 +87,17 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        playerBody.GetComponent<PlayerBody>().lastHorizontal = lastHorizontal;
+
         if (lastHorizontal > 0.0f)
         {
             //attack "sword" collider
-            capsuleCollider2D.offset = new Vector2(-0.5f, capsuleCollider2D.offset.y);
+            //capsuleCollider2D.offset = new Vector2(-0.5f, capsuleCollider2D.offset.y);
             transform.localScale = new Vector2(-Mathf.Abs(transform.localScale.x), Mathf.Abs(transform.localScale.y));
         }
         else
         {
-            capsuleCollider2D.offset = new Vector2(-0.4f, capsuleCollider2D.offset.y);
+            //capsuleCollider2D.offset = new Vector2(-0.4f, capsuleCollider2D.offset.y);
             transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), Mathf.Abs(transform.localScale.y));
         }
     }
@@ -142,12 +160,34 @@ public class Player : MonoBehaviour
         previousGround = grounded;
 
 
-        //early in development attacking
-        //if (targetObject != null && Input.GetKeyDown(KeyCode.F))
-        //{
-        //    Destroy(targetObject);
-        //    targetObject = null;
-        //}
+        // Combat
+        if (Input.GetKeyDown(KeyCode.F) && !swingingSword)
+        {
+            sword.SetActive(true);
+
+            Vector3 sp = swordPosition;
+            Quaternion sr = swordRotation;
+            sword.transform.localPosition = new Vector3(sp.x, sp.y);
+            //sword.transform.position = transform.position;
+            sword.transform.rotation = new Quaternion(sr.x, sr.y, sr.z, sr.w);
+            swordAngle = 0.0f;
+
+            swingingSword = true;
+        }
+
+        if (swingingSword)
+        {
+            float deltaAngle = Time.deltaTime * swordSpeed * lastHorizontal;
+            swordAngle += deltaAngle;
+
+            sword.transform.RotateAround(swordPivot.transform.position, new Vector3(0.0f, 0.0f, 1.0f), deltaAngle);
+
+            if (Mathf.Abs(swordAngle) > Mathf.Abs(maxSwordAngle))
+            {
+                sword.SetActive(false);
+                swingingSword = false;
+            }
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision2D)
