@@ -13,6 +13,9 @@ public class PlayerSwing : MonoBehaviour
     private List<string> canDestroy;
     private Collider2D myCollider2D;
 
+    [HideInInspector] public float lastHorizontal = 0.0f;
+    public float force = 10.0f;
+
     private void Start()
     {
         canDestroy = new List<string>();
@@ -24,11 +27,9 @@ public class PlayerSwing : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision2D)
     {
-        Debug.Log("HIT " + collision2D.gameObject.name);
         if (canDestroy.Contains(collision2D.gameObject.name))
         {
-            Debug.Log("DESTROYED " + collision2D.gameObject.name);
-            Destroy(collision2D.gameObject);
+            collision2D.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(lastHorizontal * force, force * 0.2f), ForceMode2D.Impulse);
         }
     }
 }

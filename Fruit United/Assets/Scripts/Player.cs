@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
 
     private GameObject targetObject;
 
-    private bool mysterious = true;
+    private bool mysterious = false;
 
     private System.Diagnostics.Stopwatch stopwatch;
     private string recordX;
@@ -57,6 +57,7 @@ public class Player : MonoBehaviour
     public float maxSwordAngle = 120.0f;
 
     public GameObject playerBody;
+    public GameObject playerSwing;
     public GameObject swordPivot;
     
     
@@ -88,6 +89,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         playerBody.GetComponent<PlayerBody>().lastHorizontal = lastHorizontal;
+        playerSwing.GetComponent<PlayerSwing>().lastHorizontal = lastHorizontal;
 
         if (lastHorizontal > 0.0f)
         {
@@ -99,6 +101,17 @@ public class Player : MonoBehaviour
         {
             //capsuleCollider2D.offset = new Vector2(-0.4f, capsuleCollider2D.offset.y);
             transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), Mathf.Abs(transform.localScale.y));
+        }
+
+        // Combat; needs to be in Update() not FixedUpdate()
+        if (Input.GetKeyDown(KeyCode.F) && !swingingSword)
+        {
+            sword.SetActive(true);
+
+            ResetSwordTransform();
+            swordAngle = 0.0f;
+
+            swingingSword = true;
         }
     }
 
@@ -160,27 +173,15 @@ public class Player : MonoBehaviour
         previousGround = grounded;
 
 
-        // Combat
-        if (Input.GetKeyDown(KeyCode.F) && !swingingSword)
-        {
-            sword.SetActive(true);
-
-            Vector3 sp = swordPosition;
-            Quaternion sr = swordRotation;
-            sword.transform.localPosition = new Vector3(sp.x, sp.y);
-            //sword.transform.position = transform.position;
-            sword.transform.rotation = new Quaternion(sr.x, sr.y, sr.z, sr.w);
-            swordAngle = 0.0f;
-
-            swingingSword = true;
-        }
-
+        // Combat; needs to be in FixedUpdate() not Update()
         if (swingingSword)
         {
-            float deltaAngle = Time.deltaTime * swordSpeed * lastHorizontal;
+            float deltaAngle = Time.deltaTime * swordSpeed;
             swordAngle += deltaAngle;
 
-            sword.transform.RotateAround(swordPivot.transform.position, new Vector3(0.0f, 0.0f, 1.0f), deltaAngle);
+            ResetSwordTransform();
+            sword.transform.RotateAround(swordPivot.transform.position, new Vector3(0.0f, 0.0f, 1.0f), swordAngle * lastHorizontal);
+            //sword.transform.RotateAround(swordPivot.transform.position, new Vector3(0.0f, 0.0f, 1.0f), deltaAngle);
 
             if (Mathf.Abs(swordAngle) > Mathf.Abs(maxSwordAngle))
             {
@@ -188,6 +189,16 @@ public class Player : MonoBehaviour
                 swingingSword = false;
             }
         }
+
+        Debug.Log("Pressing F: " + Input.GetKeyDown(KeyCode.F) + "\nSwinging sword: " + swingingSword);
+    }
+
+    void ResetSwordTransform()
+    {
+        Vector3 sp = swordPosition;
+        Quaternion sr = swordRotation;
+        sword.transform.localPosition = new Vector3(sp.x, sp.y);
+        sword.transform.rotation = new Quaternion(sr.x, sr.y, sr.z, sr.w);
     }
 
     void OnCollisionEnter2D(Collision2D collision2D)

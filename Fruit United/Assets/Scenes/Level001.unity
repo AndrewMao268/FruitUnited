@@ -1307,6 +1307,7 @@ GameObject:
   - component: {fileID: 216227499}
   - component: {fileID: 216227500}
   - component: {fileID: 216227501}
+  - component: {fileID: 216227502}
   m_Layer: 8
   m_Name: PlayerSword
   m_TagString: Player
@@ -1480,6 +1481,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf44164862de4046a444e51b043256f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lastHorizontal: 0
+  force: 30
+--- !u!50 &216227502
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216227497}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &231145822
 GameObject:
   m_ObjectHideFlags: 0
@@ -38942,9 +38972,10 @@ MonoBehaviour:
   newFirstLine: You did it!
   npcbrandontestscript: {fileID: 186171541}
   sword: {fileID: 216227497}
-  swordSpeed: -100
-  maxSwordAngle: -90
+  swordSpeed: -500
+  maxSwordAngle: -60
   playerBody: {fileID: 918758156}
+  playerSwing: {fileID: 216227497}
   swordPivot: {fileID: 2040474962}
 --- !u!61 &1989154603
 BoxCollider2D:
@@ -41105,7 +41136,7 @@ GameObject:
   - component: {fileID: 2082455162}
   - component: {fileID: 2082455161}
   - component: {fileID: 2082455163}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Portal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
