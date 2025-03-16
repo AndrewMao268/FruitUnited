@@ -59,6 +59,12 @@ public class Player : MonoBehaviour
     public GameObject playerBody;
     public GameObject playerSwing;
     public GameObject swordPivot;
+
+    private System.Diagnostics.Stopwatch dashStopwatch;
+    private bool dashing;
+    private float dashProgress;
+    public float dashTime = 100;
+    public float dashForce = 50.0f;
     
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -75,6 +81,7 @@ public class Player : MonoBehaviour
         swordPosition = new Vector3(asp.x, asp.y, asp.z);
         Quaternion asr = sword.transform.rotation;
         swordRotation = new Quaternion(asr.x, asr.y, asr.z, asr.w);
+        sword.SetActive(false);
 
         recordX = "";
         recordY = "";
@@ -84,6 +91,9 @@ public class Player : MonoBehaviour
         {
             inventoryStorage.Add(0);
         }
+
+        dashStopwatch = new System.Diagnostics.Stopwatch();
+        dashStopwatch.Restart();
     }
 
     private void Update()
@@ -112,6 +122,20 @@ public class Player : MonoBehaviour
             swordAngle = 0.0f;
 
             swingingSword = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R) && !swingingSword && !dashing)
+        {
+            sword.SetActive(true);
+
+            ResetSwordTransform();
+            swordAngle = 0.0f;
+
+            swingingSword = true;
+
+            dashStopwatch.Restart();
+            
+            dashing = true;
         }
     }
 
@@ -190,7 +214,17 @@ public class Player : MonoBehaviour
             }
         }
 
-        Debug.Log("Pressing F: " + Input.GetKeyDown(KeyCode.F) + "\nSwinging sword: " + swingingSword);
+        if (dashing)
+        {
+            rb.linearVelocityX = lastHorizontal * dashForce;
+            if (dashStopwatch.ElapsedMilliseconds > dashTime)
+            {
+                dashing = false;
+                rb.linearVelocityX = 0.0f;
+            }
+        }
+
+        //Debug.Log("Pressing F: " + Input.GetKeyDown(KeyCode.F) + "\nSwinging sword: " + swingingSword);
     }
 
     void ResetSwordTransform()

@@ -38977,6 +38977,8 @@ MonoBehaviour:
   playerBody: {fileID: 918758156}
   playerSwing: {fileID: 216227497}
   swordPivot: {fileID: 2040474962}
+  dashTime: 100
+  dashForce: 50
 --- !u!61 &1989154603
 BoxCollider2D:
   m_ObjectHideFlags: 0
