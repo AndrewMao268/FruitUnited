@@ -9,6 +9,7 @@ abstract public class BackgroundParallax : MonoBehaviour
     private Vector3 startPos;
     public float interval = 20.0f;
     public float parallaxEffect = 1.0f;
+    public GameObject parentFolder;
     
     [HideInInspector] public int id;
     private int idOffset = 100;
@@ -22,7 +23,7 @@ abstract public class BackgroundParallax : MonoBehaviour
             {
                 if (i == 0) continue;
 
-                GameObject newObj = Instantiate(gameObject);
+                GameObject newObj = Instantiate(gameObject, parentFolder.transform);
                 newObj.GetComponent<BackgroundParallax>().id = i;
             }
         }

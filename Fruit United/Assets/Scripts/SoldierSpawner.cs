@@ -1,12 +1,13 @@
 using UnityEngine;
 
 public class SoldierSpawner : MonoBehaviour {
-    GameObject soldier;
+
+    public GameObject soldiersFolder;
+    public GameObject soldier;
     void Start() {
-        soldier = GameObject.Find("Soldier");
 
         for (int i = 0; i < 99; i++) {
-            Instantiate(soldier);
+            GameObject newSoldier = Instantiate(soldier, soldiersFolder.transform);
         }
     }
 }
