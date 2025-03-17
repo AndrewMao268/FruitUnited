@@ -20,9 +20,7 @@ public class DaylightCycle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        int minutesSinceMidnight = (int)(GetTimeProportion * 60 * 24);
-        TimeSpan timeSpan = TimeSpan.FromMinutes(minutesSinceMidnight);
-        Debug.Log(timeSpan.ToString(@"hh\:mm"));
+        //Debug.Log(GetTimeString);
     }
 
     public float GetTimeProportion
@@ -41,6 +39,16 @@ public class DaylightCycle : MonoBehaviour
         get
         {
             return globalLightGradient.Evaluate(GetTimeProportion);
+        }
+    }
+
+    public string GetTimeString
+    {
+        get
+        {
+            int minutesSinceMidnight = (int)(GetTimeProportion * 60 * 24);
+            TimeSpan timeSpan = TimeSpan.FromMinutes(minutesSinceMidnight);
+            return timeSpan.ToString(@"hh\:mm");
         }
     }
 }
