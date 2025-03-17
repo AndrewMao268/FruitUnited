@@ -32773,7 +32773,7 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 6
     m_NumAlphaKeys: 2
-  millisecondsPerDay: 1200000
+  millisecondsPerDay: 120000
 --- !u!1 &344246616
 GameObject:
   m_ObjectHideFlags: 0
@@ -41298,7 +41298,7 @@ MonoBehaviour:
   npcbrandontestscript: {fileID: 186171541}
   sword: {fileID: 216227497}
   swordSpeed: -500
-  maxSwordAngle: -60
+  maxSwordAngle: -90
   playerBody: {fileID: 918758156}
   playerSwing: {fileID: 216227497}
   swordPivot: {fileID: 2040474962}
