@@ -65,11 +65,13 @@ public class Player : MonoBehaviour
     private float dashProgress;
     public float dashTime = 100;
     public float dashForce = 50.0f;
+    public GameObject inventory;
     
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        inventory.SetActive(false);
         capsuleCollider2D = GetComponentInChildren<CapsuleCollider2D>();
         DontDestroyOnLoad(gameObject);
         rb = GetComponent<Rigidbody2D>();
@@ -137,6 +139,11 @@ public class Player : MonoBehaviour
             
             dashing = true;
         }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            // Toggle the active state of the inventory panel
+            inventory.SetActive(!inventory.activeSelf);
+        }
     }
 
     // Update is called once per frame
@@ -173,6 +180,10 @@ public class Player : MonoBehaviour
             recordX += stopwatch.Elapsed.TotalSeconds + ", ";
             recordY += transform.position.y + ", ";
         }
+
+        
+
+
 
         //if (Input.GetKeyDown(KeyCode.F))
         //{
@@ -250,8 +261,7 @@ public class Player : MonoBehaviour
             CompositeCollider2D compositeCollider2D = targetTilemap.GetComponent<CompositeCollider2D>();
             TilemapCollider2D tilemapCollider2D = targetTilemap.GetComponent<TilemapCollider2D>();
 
-
-            npcbrandontestscript.ChangeFirstDialogue(newFirstLine);
+            npcbrandontestscript.collidedWithPortal = true;
 
             if (tilemapRenderer != null)
             {

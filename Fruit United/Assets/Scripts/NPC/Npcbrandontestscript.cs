@@ -14,13 +14,16 @@ public class Npcbrandontestscript : MonoBehaviour, IInteractable
     private int dialogueIndex;
     private bool isTyping, isDialogueActive;
 
-    private bool collidedWithPortal;
+    public bool talkedToNPC = false;
+
+    public bool collidedWithPortal = false;
 
     private string firstLine = "Hello There!";
 
     void Start()
     {
         dialogueDataBrandonTest.dialogueLines[0] = firstLine;
+        dialogueDataBrandonTest.autoProgressLines[1] = false;
     }
 
     public bool CanInteract()
@@ -48,6 +51,8 @@ public class Npcbrandontestscript : MonoBehaviour, IInteractable
     {
         isDialogueActive = true;
         dialogueIndex = 0;
+        talkedToNPC = true;
+
 
         nameTextBrandon.SetText(dialogueDataBrandonTest.npcName);
         portraitImage.sprite = dialogueDataBrandonTest.npcPortrait;
@@ -80,6 +85,7 @@ public class Npcbrandontestscript : MonoBehaviour, IInteractable
     {
         isTyping = true;
         dialogueTextBrandon.SetText("");
+       
 
         foreach(char letter in dialogueDataBrandonTest.dialogueLines[dialogueIndex])
         {
@@ -96,8 +102,14 @@ public class Npcbrandontestscript : MonoBehaviour, IInteractable
             {
             NextLine();
             }
+            else
+            {
+                dialogueDataBrandonTest.autoProgressLines[1] = true;
+                NextLine();
+            }
         }
     }
+    
 
     public void EndDialogue()
     {
@@ -108,12 +120,5 @@ public class Npcbrandontestscript : MonoBehaviour, IInteractable
         
     }
 
-    public void ChangeFirstDialogue(string newFirstLine)
-    {
-        if (!collidedWithPortal)
-        {
-            dialogueDataBrandonTest.dialogueLines[0] = newFirstLine;
-            collidedWithPortal = true;
-        }
-    }
+    
 }
