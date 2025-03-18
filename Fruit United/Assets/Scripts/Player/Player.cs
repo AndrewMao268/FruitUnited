@@ -65,6 +65,7 @@ public class Player : MonoBehaviour
     private float dashProgress;
     public float dashTime = 100;
     public float dashForce = 50.0f;
+    public GameObject inventory;
     
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -137,6 +138,11 @@ public class Player : MonoBehaviour
             dashStopwatch.Restart();
             
             dashing = true;
+        }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            // Toggle the active state of the inventory panel
+            inventory.SetActive(!inventory.activeSelf);
         }
     }
 
