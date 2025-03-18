@@ -33032,6 +33032,7 @@ GameObject:
   m_Component:
   - component: {fileID: 698189739}
   - component: {fileID: 698189738}
+  - component: {fileID: 698189740}
   m_Layer: 0
   m_Name: HealthBar
   m_TagString: Untagged
@@ -33102,16 +33103,30 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 698189737}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.33, y: 4.46, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1570011479}
   - {fileID: 953926946}
   - {fileID: 1326505116}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1989154601}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &698189740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 698189737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f75beb103a8c314687f36fb8302cf09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBar: {fileID: 1326505116}
+  mask: {fileID: 953926946}
 --- !u!1 &729405688
 GameObject:
   m_ObjectHideFlags: 0
@@ -34630,7 +34645,7 @@ SpriteRenderer:
   m_SortingLayerID: 505140667
   m_SortingLayer: 9
   m_SortingOrder: 2
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -34638,7 +34653,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &969121476
@@ -39368,15 +39383,16 @@ Transform:
   m_GameObject: {fileID: 1989154597}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.987, y: -0.4821, z: 0}
-  m_LocalScale: {x: 1.37004, y: 1.117391, z: 0.06819852}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: 3.05, y: -0.48, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 508291927}
   - {fileID: 918758157}
   - {fileID: 216227498}
   - {fileID: 546697688}
   - {fileID: 1070157432}
+  - {fileID: 698189739}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1989154602
@@ -42165,4 +42181,3 @@ SceneRoots:
   - {fileID: 1266916552}
   - {fileID: 105059016}
   - {fileID: 853189184}
-  - {fileID: 698189739}
