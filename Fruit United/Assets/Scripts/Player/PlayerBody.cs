@@ -8,9 +8,16 @@ public class PlayerBody : MonoBehaviour {
 
     public Animator animator;
 
+    [HideInInspector] public float lastHorizontal = 0.0f;
+
     private void Start()
     {
         playerBehaviour = GameObject.Find("Player").GetComponent<MonoBehaviour>() as Player;
+    }
+
+    private void Update()
+    {
+        
     }
     private void FixedUpdate()
     {

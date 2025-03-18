@@ -48,6 +48,11 @@ public class Soldier : MonoBehaviour
         rb.AddForce(new Vector2(moveValue.x * xSpeed, 0.0f), ForceMode2D.Force);
 
         transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0.0f);
+
+        if (transform.position.y < -20.0f)
+        {
+            transform.position = new Vector3(0.0f, 20.0f, 0.0f);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision2D)

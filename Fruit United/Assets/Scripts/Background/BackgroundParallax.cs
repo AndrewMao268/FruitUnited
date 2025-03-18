@@ -1,24 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
+using QuikGraph.Algorithms;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class BackgroundParallax : MonoBehaviour
+abstract public class BackgroundParallax : MonoBehaviour
 {
     public GameObject cam;
 
     private Vector3 startPos;
     public float interval = 20.0f;
     public float parallaxEffect = 1.0f;
+    public GameObject parentFolder;
     
     [HideInInspector] public int id;
     private int idOffset = 100;
-    private System.Random rand;
-    private float randomOffset;
 
-    void Start()
+    protected void OwnStart()
     {
-        rand = new System.Random();
-        randomOffset = rand.Next(-5, 5);
         startPos = transform.position;
         if (id == 0)
         {
@@ -26,17 +23,19 @@ public class BackgroundParallax : MonoBehaviour
             {
                 if (i == 0) continue;
 
-                GameObject newObj = Instantiate(gameObject);
+                GameObject newObj = Instantiate(gameObject, parentFolder.transform);
                 newObj.GetComponent<BackgroundParallax>().id = i;
             }
         }
     }
 
+    abstract public void SetRandomFactor();
+    abstract public float GetRandomFactor();
    
     void FixedUpdate()
     {
         float parallax = (cam.transform.position.x - cam.GetComponent<CameraMan>().initialX) * parallaxEffect;
-        float position = startPos.x + interval * id + randomOffset;
+        float position = startPos.x + interval * id + GetRandomFactor();
         transform.position = new Vector3(position + parallax, transform.position.y, transform.position.z);
     }
 }

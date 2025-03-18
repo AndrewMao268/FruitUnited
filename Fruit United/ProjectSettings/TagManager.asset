@@ -21,7 +21,7 @@ TagManager:
   - Spawn of Evil
   - Items
   - NPC
-  - 
+  - Portal
   - 
   - 
   - 
@@ -63,6 +63,15 @@ TagManager:
     locked: 0
   - name: Closest Vegetation
     uniqueID: 2056823971
+    locked: 0
+  - name: BuildingBackground
+    uniqueID: 2603374037
+    locked: 0
+  - name: BuildingAttachedItems
+    uniqueID: 2094675777
+    locked: 0
+  - name: Buildings
+    uniqueID: 804890841
     locked: 0
   - name: Player
     uniqueID: 705577343

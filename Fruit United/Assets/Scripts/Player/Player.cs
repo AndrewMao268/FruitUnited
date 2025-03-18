@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
 
     private GameObject targetObject;
 
-    private bool mysterious = true;
+    private bool mysterious = false;
 
     private System.Diagnostics.Stopwatch stopwatch;
     private string recordX;
@@ -48,10 +48,25 @@ public class Player : MonoBehaviour
 
     private List<int> inventoryStorage;
 
-    public GameObject inventory;
+    public GameObject sword;
+    private Vector3 swordPosition;
+    private Quaternion swordRotation;
+    private bool swingingSword = false;
+    public float swordSpeed = 1.0f;
+    private float swordAngle = 0.0f;
+    public float maxSwordAngle = 120.0f;
 
+    public GameObject playerBody;
+    public GameObject playerSwing;
+    public GameObject swordPivot;
 
-
+    private System.Diagnostics.Stopwatch dashStopwatch;
+    private bool dashing;
+    private float dashProgress;
+    public float dashTime = 100;
+    public float dashForce = 50.0f;
+    
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -63,6 +78,12 @@ public class Player : MonoBehaviour
         stopwatch = new System.Diagnostics.Stopwatch();
         stopwatch.Restart();
 
+        Vector3 asp = sword.transform.localPosition;
+        swordPosition = new Vector3(asp.x, asp.y, asp.z);
+        Quaternion asr = sword.transform.rotation;
+        swordRotation = new Quaternion(asr.x, asr.y, asr.z, asr.w);
+        sword.SetActive(false);
+
         recordX = "";
         recordY = "";
 
@@ -71,25 +92,51 @@ public class Player : MonoBehaviour
         {
             inventoryStorage.Add(0);
         }
+
+        dashStopwatch = new System.Diagnostics.Stopwatch();
+        dashStopwatch.Restart();
     }
 
     private void Update()
     {
+        playerBody.GetComponent<PlayerBody>().lastHorizontal = lastHorizontal;
+        playerSwing.GetComponent<PlayerSwing>().lastHorizontal = lastHorizontal;
+
         if (lastHorizontal > 0.0f)
         {
             //attack "sword" collider
-            capsuleCollider2D.offset = new Vector2(-0.5f, capsuleCollider2D.offset.y);
+            //capsuleCollider2D.offset = new Vector2(-0.5f, capsuleCollider2D.offset.y);
             transform.localScale = new Vector2(-Mathf.Abs(transform.localScale.x), Mathf.Abs(transform.localScale.y));
         }
         else
         {
-            capsuleCollider2D.offset = new Vector2(-0.4f, capsuleCollider2D.offset.y);
+            //capsuleCollider2D.offset = new Vector2(-0.4f, capsuleCollider2D.offset.y);
             transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), Mathf.Abs(transform.localScale.y));
         }
-        if (Input.GetKeyDown(KeyCode.I))
+
+        // Combat; needs to be in Update() not FixedUpdate()
+        if (Input.GetKeyDown(KeyCode.F) && !swingingSword)
         {
-            // Toggle the active state of the inventory panel
-            inventory.SetActive(!inventory.activeSelf);
+            sword.SetActive(true);
+
+            ResetSwordTransform();
+            swordAngle = 0.0f;
+
+            swingingSword = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R) && !swingingSword && !dashing)
+        {
+            sword.SetActive(true);
+
+            ResetSwordTransform();
+            swordAngle = 0.0f;
+
+            swingingSword = true;
+
+            dashStopwatch.Restart();
+            
+            dashing = true;
         }
     }
 
@@ -155,12 +202,42 @@ public class Player : MonoBehaviour
         previousGround = grounded;
 
 
-        //early in development attacking
-        //if (targetObject != null && Input.GetKeyDown(KeyCode.F))
-        //{
-        //    Destroy(targetObject);
-        //    targetObject = null;
-        //}
+        // Combat; needs to be in FixedUpdate() not Update()
+        if (swingingSword)
+        {
+            float deltaAngle = Time.deltaTime * swordSpeed;
+            swordAngle += deltaAngle;
+
+            ResetSwordTransform();
+            sword.transform.RotateAround(swordPivot.transform.position, new Vector3(0.0f, 0.0f, 1.0f), swordAngle * lastHorizontal);
+            //sword.transform.RotateAround(swordPivot.transform.position, new Vector3(0.0f, 0.0f, 1.0f), deltaAngle);
+
+            if (Mathf.Abs(swordAngle) > Mathf.Abs(maxSwordAngle))
+            {
+                sword.SetActive(false);
+                swingingSword = false;
+            }
+        }
+
+        if (dashing)
+        {
+            rb.linearVelocityX = lastHorizontal * dashForce;
+            if (dashStopwatch.ElapsedMilliseconds > dashTime)
+            {
+                dashing = false;
+                rb.linearVelocityX = 0.0f;
+            }
+        }
+
+        //Debug.Log("Pressing F: " + Input.GetKeyDown(KeyCode.F) + "\nSwinging sword: " + swingingSword);
+    }
+
+    void ResetSwordTransform()
+    {
+        Vector3 sp = swordPosition;
+        Quaternion sr = swordRotation;
+        sword.transform.localPosition = new Vector3(sp.x, sp.y);
+        sword.transform.rotation = new Quaternion(sr.x, sr.y, sr.z, sr.w);
     }
 
     void OnCollisionEnter2D(Collision2D collision2D)

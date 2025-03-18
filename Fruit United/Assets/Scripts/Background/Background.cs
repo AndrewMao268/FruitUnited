@@ -8,11 +8,6 @@ public class Background : MonoBehaviour
 
     public GameObject followObject;
 
-    void Start()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
-
     void Update()
     {
         float followX = followObject.transform.position.x;
