@@ -53,7 +53,7 @@ public class HiveAgent
         stopwatch.Restart();
     }
 
-    public void TakeControl()
+   public void TakeControl()
 {
     if (!followingTrajectory)
     {
@@ -68,16 +68,17 @@ public class HiveAgent
     double deltaTime = elapsed - previousElapsed;
     previousElapsed = elapsed;
 
+    // Handle JumpTrajectory
     if (trajectory is JumpTrajectory)
     {
-        JumpTrajectory jumpTrajectory = (JumpTrajectory) trajectory;
+        JumpTrajectory jumpTrajectory = (JumpTrajectory)trajectory;
         float speed = Mathf.Sqrt(attributes.jumpA / jumpTrajectory.a);
         if (float.IsNaN(speed))
         {
-            Debug.Log(jumpTrajectory.toString());
+            Debug.Log(jumpTrajectory.ToString());
         }
         float xDir = Mathf.Sign(jumpTrajectory.x2 - jumpTrajectory.x1);
-        
+
         jumpX += (float)(speed * xDir * deltaTime);
 
         float xPos = jumpX;
@@ -89,26 +90,26 @@ public class HiveAgent
         if (jumpProgress > 1.0f)
         {
             transform.position = new Vector3(jumpTrajectory.x2, jumpTrajectory.y2, 0.0f);
-            
-            // Check if Rigidbody2D exists before accessing or adding
-            if (user.GetComponent<Rigidbody2D>() == null)
+
+            // Check if the Rigidbody2D exists before accessing it
+            Rigidbody2D rb = user.GetComponent<Rigidbody2D>();
+            if (rb != null)
             {
-                user.AddComponent<Rigidbody2D>();
+                rb.linearVelocity = new Vector2(xDir * speed, rb.linearVelocity.y); // Safe to modify
             }
 
-            user.rb = user.GetComponent<Rigidbody2D>();
-            
-            // Null check before accessing linearVelocityX
-            if (user.rb != null)
+            // Freeze the rotation after the jump
+            if (rb != null)
             {
-                user.rb.linearVelocityX = xDir * speed;
+                rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
-            user.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
             currentTrajectoryIndex++;
         }
     }
     else
     {
+        // Handle RunTrajectory
         RunTrajectory runTrajectory = (RunTrajectory)trajectory;
         if (currentTrajectoryIndex == trajectories.Count - 1)
         {
@@ -118,45 +119,48 @@ public class HiveAgent
 
         float xDir = Mathf.Sign(runTrajectory.x2 - transform.position.x);
         float velocity = (float)((transform.position.x - previousXPos) / deltaTime);
-        currentRBVelocity = (user.rb != null) ? user.rb.linearVelocityX : 0.0f;  // Safe access to linearVelocityX
+
+        // Handle Rigidbody2D safely
+        Rigidbody2D rb = user.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            currentRBVelocity = rb.linearVelocity.x; // Use safely
+        }
+        else
+        {
+            currentRBVelocity = 0.0f; // Default value if Rigidbody2D is null
+        }
+
         previousXPos = transform.position.x;
 
+        // Additional velocity and movement logic
         if (Mathf.Abs(runTrajectory.x2 - transform.position.x) > 1.0f)
         {
-            if (Mathf.Abs(user.rb.linearVelocityX) < user.maxSpeedX)
+            if (Mathf.Abs(rb.linearVelocity.x) < user.maxSpeedX)
             {
-                user.rb.AddForce(new Vector2(xDir * user.xAccel, 0.0f), ForceMode2D.Force);
+                rb.AddForce(new Vector2(xDir * user.xAccel, 0.0f), ForceMode2D.Force);
             }
         }
         else
         {
-            if (velocity < xDir * nextTrajectory.idealSpeed)
+            if (Mathf.Abs(rb.linearVelocity.x) < user.maxSpeedX)
             {
-                if (Mathf.Abs(user.rb.linearVelocityX) < user.maxSpeedX)
-                {
-                    user.rb.AddForce(new Vector2(user.xAccel, 0.0f), ForceMode2D.Force);
-                }
-            }
-            else
-            {
-                if (Mathf.Abs(user.rb.linearVelocityX) < user.maxSpeedX)
-                {
-                    user.rb.AddForce(new Vector2(-user.xAccel, 0.0f), ForceMode2D.Force);
-                }
+                rb.AddForce(new Vector2(user.xAccel, 0.0f), ForceMode2D.Force);
             }
         }
 
-        float progress = mapRange(transform.position.x + (float)(user.rb.linearVelocityX * deltaTime), runTrajectory.x1, runTrajectory.x2, 0.0f, 1.0f);
+        float progress = mapRange(transform.position.x + (float)(rb.linearVelocity.x * deltaTime), runTrajectory.x1, runTrajectory.x2, 0.0f, 1.0f);
 
         if (progress > 1.0f)
         {
             currentTrajectoryIndex++;
 
-            // Check if Rigidbody2D exists before trying to destroy it
-            if (user.GetComponent<Rigidbody2D>() != null)
+            // Ensure Rigidbody2D exists before trying to destroy it
+            if (rb != null)
             {
-                Object.Destroy(user.GetComponent<Rigidbody2D>());
+                Object.Destroy(rb);
             }
+
             jumpX = nextTrajectory.x1;
         }
     }
@@ -356,3 +360,4 @@ public class HiveAgent
         return outputStart + ((outputEnd - outputStart) / (inputEnd - inputStart)) * (input - inputStart);
     }
 }
+
