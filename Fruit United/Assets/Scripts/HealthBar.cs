@@ -5,20 +5,23 @@ public class HealthBar : MonoBehaviour
     public Transform healthBar;
     public Transform mask;
 
-    private float maxHealth = 100;
+    public float maxHealth = 100;
     private float currentHealth;
     private Vector3 targetPosition;
+
+    private Vector3 originalPosition;
 
     void Start()
     {
         currentHealth = maxHealth;
-        targetPosition = healthBar.localPosition;
+        originalPosition = mask.localPosition;
+        targetPosition = originalPosition;
     }
 
     void Update()
     {
         // Smoothly move the health bar's position towards the target position
-        healthBar.localPosition = Vector3.Lerp(healthBar.localPosition, targetPosition, 5f * Time.deltaTime);
+        mask.localPosition = Vector3.Lerp(mask.localPosition, targetPosition, 5f * Time.deltaTime);
 
         // Detect Space bar press to take damage
         if (Input.GetKeyDown(KeyCode.Space))
@@ -67,7 +70,7 @@ public class HealthBar : MonoBehaviour
         float healthPercent = currentHealth / maxHealth;
 
         // Calculate target position of the health bar based on health percentage
-        targetPosition = new Vector3(mask.localPosition.x - (1 - healthPercent) * mask.GetComponent<SpriteRenderer>().bounds.size.x, healthBar.localPosition.y, healthBar.localPosition.z);
-        Debug.Log("Target Position of Health Bar: " + targetPosition);
+        targetPosition = new Vector3(originalPosition.x - ((1.0f - healthPercent) * healthBar.GetComponent<SpriteRenderer>().bounds.size.x) / 2.0f, healthBar.localPosition.y, healthBar.localPosition.z);
+        Debug.Log("Health Percent: " + healthPercent);
     }
 }
