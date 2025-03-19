@@ -272,7 +272,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      FinalHealthBarUI-sheet 1_0: -8136894646994834317
+      FinalHealthBarUI-sheet 1_1: -6603266038388449594
+      FinalHealthBarUI-sheet 1_2: 3498668205120423115
+      FinalHealthBarUI-sheet 1_3: -3198199582966880669
+      FinalHealthBarUI-sheet 1_4: 345332473660531420
+      FinalHealthBarUI-sheet 1_5: 5572401385299648965
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
