@@ -5,7 +5,7 @@ public class HealthBar : MonoBehaviour
     public Transform healthBar;
     public Transform mask;
 
-    private float maxHealth = 100f;
+    private float maxHealth = 100;
     private float currentHealth;
     private Vector3 targetPosition;
 
