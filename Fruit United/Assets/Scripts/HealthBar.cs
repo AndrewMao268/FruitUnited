@@ -10,6 +10,11 @@ public class HealthBar : MonoBehaviour
     private Vector3 targetPosition;
 
     private Vector3 originalPosition;
+    public GameObject allHealthBar;
+
+
+
+
 
     void Start()
     {
@@ -20,6 +25,9 @@ public class HealthBar : MonoBehaviour
 
     void Update()
     {
+
+
+        allHealthBar.transform.localScale = new Vector3(1, 1, 1);
         // Smoothly move the health bar's position towards the target position
         mask.localPosition = Vector3.Lerp(mask.localPosition, targetPosition, 5f * Time.deltaTime);
 
