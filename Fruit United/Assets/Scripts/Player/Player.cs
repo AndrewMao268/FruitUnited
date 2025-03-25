@@ -10,8 +10,8 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
 
-    Rigidbody2D rb;
-    
+    public Rigidbody2D rb;
+
     public float jumpHeight = 4.0f;
     public float xSpeed = 7.0f;
 
@@ -65,8 +65,10 @@ public class Player : MonoBehaviour
     private float dashProgress;
     public float dashTime = 100;
     public float dashForce = 50.0f;
-    
-    
+
+
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -134,7 +136,7 @@ public class Player : MonoBehaviour
             swingingSword = true;
 
             dashStopwatch.Restart();
-            
+
             dashing = true;
         }
     }
@@ -240,7 +242,7 @@ public class Player : MonoBehaviour
         if (collision2D.gameObject.name == "Portal")
         {
             //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            
+
             transform.position = new Vector2(0.0f, 4.0f);
 
             GameObject gridObject = GameObject.Find("Grid"); // Find the Grid GameObject
@@ -262,7 +264,7 @@ public class Player : MonoBehaviour
             if (rigidbody2D != null)
             {
                 Destroy(compositeCollider2D);
-                Destroy(rigidbody2D); 
+                Destroy(rigidbody2D);
 
             }
         }
@@ -287,7 +289,7 @@ public class Player : MonoBehaviour
                 Mystery(inventoryString);
             }
         }
- 
+
     }
 
     void Mystery(string outputText)
@@ -311,7 +313,7 @@ public class Player : MonoBehaviour
     //early in development attacking
     void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.CompareTag("Soldiers"))
+        if (col.CompareTag("Soldiers"))
         {
             targetObject = col.gameObject;
         }
