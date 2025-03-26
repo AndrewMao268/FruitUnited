@@ -30065,7 +30065,6 @@ MonoBehaviour:
   mask: {fileID: 1634240369}
   maxHealth: 100
   allHealthBar: {fileID: 418894175}
-  player: {fileID: 0}
   player: {fileID: 1989154597}
 --- !u!212 &418894178
 SpriteRenderer:
