@@ -15,10 +15,10 @@ MonoBehaviour:
   npcName: Portal Man
   npcPortrait: {fileID: -8173353090802019188, guid: 7b00e4775eb588941ae6d4d3c2d773f7, type: 3}
   dialogueLines:
-  - You did it!
+  - Hello There!
   - Legend has it whoever enters the mysterious blue portal opens up a secret behind
     these rocky mountains...
   - You did it!
-  autoProgressLines: 010000
+  autoProgressLines: 010100
   autoProgressDelay: 1.5
   typingSpeed: 0.05
