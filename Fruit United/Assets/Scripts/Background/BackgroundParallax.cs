@@ -32,7 +32,7 @@ abstract public class BackgroundParallax : MonoBehaviour
     abstract public void SetRandomFactor();
     abstract public float GetRandomFactor();
    
-    void FixedUpdate()
+    void Update()
     {
         float parallax = (cam.transform.position.x - cam.GetComponent<CameraMan>().initialX) * parallaxEffect;
         float position = startPos.x + interval * id + GetRandomFactor();
