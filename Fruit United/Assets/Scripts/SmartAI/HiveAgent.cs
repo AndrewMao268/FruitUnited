@@ -53,127 +53,116 @@ public class HiveAgent
         stopwatch.Restart();
     }
 
-   public void TakeControl()
-{
-    if (!followingTrajectory)
+    public void TakeControl()
     {
-        GoToRandomPlace();
-        return;
-    }
-
-    Trajectory trajectory = trajectories[currentTrajectoryIndex];
-    Transform transform = user.transform;
-
-    double elapsed = stopwatch.Elapsed.TotalSeconds;
-    double deltaTime = elapsed - previousElapsed;
-    previousElapsed = elapsed;
-
-    // Handle JumpTrajectory
-    if (trajectory is JumpTrajectory)
-    {
-        JumpTrajectory jumpTrajectory = (JumpTrajectory)trajectory;
-        float speed = Mathf.Sqrt(attributes.jumpA / jumpTrajectory.a);
-        if (float.IsNaN(speed))
+        if (!followingTrajectory)
         {
-            Debug.Log(jumpTrajectory.ToString());
+            GoToRandomPlace();
+            return;
         }
-        float xDir = Mathf.Sign(jumpTrajectory.x2 - jumpTrajectory.x1);
 
-        jumpX += (float)(speed * xDir * deltaTime);
+        //Debug.Log(currentTrajectoryIndex);
 
-        float xPos = jumpX;
-        float yPos = jumpTrajectory.plugIn(xPos);
+        Trajectory trajectory = trajectories[currentTrajectoryIndex];
+        Transform transform = user.transform;
 
-        transform.position = new Vector3(xPos, yPos, 0.0f);
+        double elapsed = stopwatch.Elapsed.TotalSeconds;
+        double deltaTime = elapsed - previousElapsed;
+        previousElapsed = elapsed;
 
-        float jumpProgress = mapRange(jumpX, jumpTrajectory.x1, jumpTrajectory.x2, 0.0f, 1.0f);
-        if (jumpProgress > 1.0f)
+        if (trajectory is JumpTrajectory)
         {
-            transform.position = new Vector3(jumpTrajectory.x2, jumpTrajectory.y2, 0.0f);
-
-            // Check if the Rigidbody2D exists before accessing it
-            Rigidbody2D rb = user.GetComponent<Rigidbody2D>();
-            if (rb != null)
+            JumpTrajectory jumpTrajectory = (JumpTrajectory)trajectory;
+            float speed = Mathf.Sqrt(attributes.jumpA / jumpTrajectory.a);
+            if (float.IsNaN(speed))
             {
-                rb.linearVelocity = new Vector2(xDir * speed, rb.linearVelocity.y); // Safe to modify
+                Debug.Log(jumpTrajectory.toString());
             }
+            float xDir = Mathf.Sign(jumpTrajectory.x2 - jumpTrajectory.x1);
 
-            // Freeze the rotation after the jump
-            if (rb != null)
+            jumpX += (float)(speed * xDir * deltaTime);
+
+            float xPos = jumpX;
+            float yPos = jumpTrajectory.plugIn(xPos);
+
+            transform.position = new Vector3(xPos, yPos, 0.0f);
+
+            float jumpProgress = mapRange(jumpX, jumpTrajectory.x1, jumpTrajectory.x2, 0.0f, 1.0f);
+            if (jumpProgress > 1.0f)
             {
-                rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-            }
-
-            currentTrajectoryIndex++;
-        }
-    }
-    else
-    {
-        // Handle RunTrajectory
-        RunTrajectory runTrajectory = (RunTrajectory)trajectory;
-        if (currentTrajectoryIndex == trajectories.Count - 1)
-        {
-            throw new System.Exception("No jump trajectory after run trajectory");
-        }
-        JumpTrajectory nextTrajectory = (JumpTrajectory)trajectories[currentTrajectoryIndex + 1];
-
-        float xDir = Mathf.Sign(runTrajectory.x2 - transform.position.x);
-        float velocity = (float)((transform.position.x - previousXPos) / deltaTime);
-
-        // Handle Rigidbody2D safely
-        Rigidbody2D rb = user.GetComponent<Rigidbody2D>();
-        if (rb != null)
-        {
-            currentRBVelocity = rb.linearVelocity.x; // Use safely
-        }
-        else
-        {
-            currentRBVelocity = 0.0f; // Default value if Rigidbody2D is null
-        }
-
-        previousXPos = transform.position.x;
-
-        // Additional velocity and movement logic
-        if (Mathf.Abs(runTrajectory.x2 - transform.position.x) > 1.0f)
-        {
-            if (Mathf.Abs(rb.linearVelocity.x) < user.maxSpeedX)
-            {
-                rb.AddForce(new Vector2(xDir * user.xAccel, 0.0f), ForceMode2D.Force);
+                transform.position = new Vector3(jumpTrajectory.x2, jumpTrajectory.y2, 0.0f);
+                user.AddComponent<Rigidbody2D>();
+                user.rb = user.GetComponent<Rigidbody2D>();
+                user.rb.linearVelocityX = xDir * speed;
+                //user.rb.linearVelocityX = 0.0f;
+                user.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+                currentTrajectoryIndex++;
             }
         }
         else
         {
-            if (Mathf.Abs(rb.linearVelocity.x) < user.maxSpeedX)
+            RunTrajectory runTrajectory = (RunTrajectory)trajectory;
+            if (currentTrajectoryIndex == trajectories.Count - 1)
             {
-                rb.AddForce(new Vector2(user.xAccel, 0.0f), ForceMode2D.Force);
+                throw new System.Exception("No jump trajectory after run trajectory");
+            }
+            JumpTrajectory nextTrajectory = (JumpTrajectory)trajectories[currentTrajectoryIndex + 1];
+
+
+
+            //float xDir = Mathf.Sign(runTrajectory.x2 - runTrajectory.x1);
+            float xDir = Mathf.Sign(runTrajectory.x2 - transform.position.x);
+
+            float velocity = (float)((transform.position.x - previousXPos) / deltaTime);
+            currentRBVelocity = user.rb.linearVelocityX;
+            previousXPos = transform.position.x;
+
+            if (Mathf.Abs(runTrajectory.x2 - transform.position.x) > 1.0f)
+            {
+                if (Mathf.Abs(user.rb.linearVelocityX) < user.maxSpeedX)
+                {
+                    user.rb.AddForce(new Vector2(xDir * user.xAccel, 0.0f), ForceMode2D.Force);
+                }
+            }
+            else
+            {
+                if (velocity < xDir * nextTrajectory.idealSpeed)
+                {
+                    if (Mathf.Abs(user.rb.linearVelocityX) < user.maxSpeedX)
+                    {
+                        user.rb.AddForce(new Vector2(user.xAccel, 0.0f), ForceMode2D.Force);
+                    }
+                }
+                else
+                {
+                    if (Mathf.Abs(user.rb.linearVelocityX) < user.maxSpeedX)
+                    {
+                        user.rb.AddForce(new Vector2(-user.xAccel, 0.0f), ForceMode2D.Force);
+                    }
+                }
+            }
+
+            float progress = mapRange(transform.position.x + (float)(user.rb.linearVelocityX * deltaTime), runTrajectory.x1, runTrajectory.x2, 0.0f, 1.0f);
+
+            if (progress > 1.0f)
+            {
+                currentTrajectoryIndex++;
+
+                Object.Destroy(user.GetComponent<Rigidbody2D>());
+                jumpX = nextTrajectory.x1;
             }
         }
 
-        float progress = mapRange(transform.position.x + (float)(rb.linearVelocity.x * deltaTime), runTrajectory.x1, runTrajectory.x2, 0.0f, 1.0f);
-
-        if (progress > 1.0f)
+        if (currentTrajectoryIndex >= trajectories.Count)
         {
-            currentTrajectoryIndex++;
-
-            // Ensure Rigidbody2D exists before trying to destroy it
-            if (rb != null)
-            {
-                Object.Destroy(rb);
-            }
-
-            jumpX = nextTrajectory.x1;
+            followingTrajectory = false;
+            currentTrajectoryIndex = 0;
+            currentRBVelocity = 0.0f;
+            previousXPos = 0.0f;
+            jumpX = 0.0f;
         }
     }
 
-    if (currentTrajectoryIndex >= trajectories.Count)
-    {
-        followingTrajectory = false;
-        currentTrajectoryIndex = 0;
-        currentRBVelocity = 0.0f;
-        previousXPos = 0.0f;
-        jumpX = 0.0f;
-    }
-}
     public void GoToRandomPlace()
     {
         hiveDrawingTools.ClearVisuals();
@@ -360,4 +349,3 @@ public class HiveAgent
         return outputStart + ((outputEnd - outputStart) / (inputEnd - inputStart)) * (input - inputStart);
     }
 }
-
