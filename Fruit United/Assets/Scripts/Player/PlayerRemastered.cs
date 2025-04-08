@@ -34,7 +34,7 @@ public class PlayerRemastered : MonoBehaviour
         // Attacking
         attackIndex = 0;
         attackStopwatch = new System.Diagnostics.Stopwatch();
-        attackStopwatch.Reset();
+        attackStopwatch.Restart();
     }
 
     void FixedUpdate()
@@ -69,7 +69,7 @@ public class PlayerRemastered : MonoBehaviour
         animator.SetInteger("AnimState", speedX > Mathf.Epsilon ? 1 : 0);
 
         // Attacking
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && attackStopwatch.ElapsedMilliseconds > 250)
         {
             attackIndex = (attackIndex + 1) % 3;
             if (attackStopwatch.ElapsedMilliseconds > 1000)

@@ -39131,7 +39131,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   jumpImpulse: 7
-  maxSpeedX: 10
+  maxSpeedX: 4
   accelX: 20
 --- !u!95 &1989154607
 Animator:
