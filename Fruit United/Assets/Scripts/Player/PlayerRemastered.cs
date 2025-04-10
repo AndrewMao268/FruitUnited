@@ -28,6 +28,7 @@ public class PlayerRemastered : MonoBehaviour
 
     private bool pressingHorizontal;
     private bool pressingVertical;
+    private bool facingLeft = false;
 
     void Start()
     {
@@ -35,6 +36,7 @@ public class PlayerRemastered : MonoBehaviour
         attackIndex = 0;
         attackStopwatch = new System.Diagnostics.Stopwatch();
         attackStopwatch.Restart();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void FixedUpdate()
@@ -67,6 +69,18 @@ public class PlayerRemastered : MonoBehaviour
         }
         spriteRenderer.flipX = moveValue.x < 0.0f;
         animator.SetInteger("AnimState", speedX > Mathf.Epsilon ? 1 : 0);
+
+        // Player facing direction fix
+        float inputDirection = Input.GetAxisRaw("Horizontal");
+        if (inputDirection < 0)
+        {
+            facingLeft = true;
+        }
+        else if (inputDirection > 0)
+        {
+            facingLeft = false;
+        }
+        spriteRenderer.flipX = facingLeft;
 
         // Attacking
         if (Input.GetKeyDown(KeyCode.Space) && attackStopwatch.ElapsedMilliseconds > 250)

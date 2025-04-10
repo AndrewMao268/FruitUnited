@@ -40111,8 +40111,8 @@ Transform:
   m_GameObject: {fileID: 2125308732}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.1, y: -8.5, z: 0}
-  m_LocalScale: {x: 64, y: 64, z: 1}
+  m_LocalPosition: {x: -5.2, y: 3.5, z: 0}
+  m_LocalScale: {x: 8, y: 8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 869502929}
@@ -40132,8 +40132,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 2008563267}
-  interval: 162
-  parallaxEffect: 1
+  interval: 36
+  parallaxEffect: 0.9
   parentFolder: {fileID: 1269604527}
   id: 0
 --- !u!1 &2125323823

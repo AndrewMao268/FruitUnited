@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
 {
 
     public Rigidbody2D rb;
+    
 
     public float jumpHeight = 4.0f;
     public float xSpeed = 7.0f;
@@ -84,6 +85,8 @@ public class Player : MonoBehaviour
         Quaternion asr = sword.transform.rotation;
         swordRotation = new Quaternion(asr.x, asr.y, asr.z, asr.w);
         sword.SetActive(false);
+
+     
 
         recordX = "";
         recordY = "";
@@ -163,6 +166,7 @@ public class Player : MonoBehaviour
         if (pressingHorizontal != 0.0f)
         {
             lastHorizontal = pressingHorizontal;
+            
         }
 
         // Moving Y
@@ -203,7 +207,18 @@ public class Player : MonoBehaviour
         if (Mathf.Abs(rb.linearVelocityX) < maxSpeedX)
         {
             rb.AddForce(new Vector2(moveValue.x * xAccel, 0.0f), ForceMode2D.Force);
+            float moveHorizontal = Input.GetAxis("Horizontal");
+            if (moveHorizontal > 0)
+            {
+                spriteRenderer.flipX = false; // Face right
+            }
+            else if (moveHorizontal < 0)
+            {
+                spriteRenderer.flipX = true; // Face left
+            }
+
         }
+        
 
         previousGround = grounded;
 
