@@ -8,6 +8,7 @@ public class CameraMan : MonoBehaviour
 
     public GameObject followObject;
     public float speed = 0.01f;
+    public float yOffset;
 
     [HideInInspector] public float initialX;
 
@@ -20,7 +21,7 @@ public class CameraMan : MonoBehaviour
     void Update()
     {
         float followX = followObject.transform.position.x;
-        float followY = followObject.transform.position.y + 2;
+        float followY = followObject.transform.position.y + yOffset;
         transform.position = new Vector3(followX, followY, -10.0f);
 
         //float dx = 0.0f;
