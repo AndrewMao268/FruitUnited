@@ -73,6 +73,12 @@ TagManager:
   - name: Buildings
     uniqueID: 804890841
     locked: 0
+  - name: BackgroundGround
+    uniqueID: 1689499855
+    locked: 0
+  - name: Ground
+    uniqueID: 2689048585
+    locked: 0
   - name: Player
     uniqueID: 705577343
     locked: 0
