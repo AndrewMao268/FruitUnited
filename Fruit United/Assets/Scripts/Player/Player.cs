@@ -10,6 +10,8 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
 
+
+    public SpriteRenderer spriteRenderer;
     public Rigidbody2D rb;
     
 
@@ -86,6 +88,7 @@ public class Player : MonoBehaviour
         swordRotation = new Quaternion(asr.x, asr.y, asr.z, asr.w);
         sword.SetActive(false);
 
+        spriteRenderer = GetComponent<SpriteRenderer>();
      
 
         recordX = "";

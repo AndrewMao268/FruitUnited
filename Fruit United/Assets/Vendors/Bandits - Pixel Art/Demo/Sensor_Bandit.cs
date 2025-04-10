@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Sensor_Bandit : MonoBehaviour {
+public class Sensor_Bandit2 : MonoBehaviour {
 
     private int m_ColCount = 0;
 
