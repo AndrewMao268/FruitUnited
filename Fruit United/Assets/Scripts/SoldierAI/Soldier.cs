@@ -1,13 +1,21 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Soldier : MonoBehaviour
 {
-
     Rigidbody2D rb;
+
+    // Grounding
     bool grounded;
-    GameObject player;
+    public Tilemap ground;
+
+    // Getting attacked
+    public GameObject attackCollider;
+    public PlayerRemastered playerRemastered;
+
+    // AI
+    public GameObject player;
     
     public float jumpHeight = 4.0f;
     public float xSpeed = 7.0f;
@@ -17,10 +25,9 @@ public class Soldier : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         grounded = false;
-        player = GameObject.Find("Player");
 
         System.Random random = new System.Random();
-        transform.position = new Vector2(random.Next(950, 2300) / 10.0f, 5.0f);
+        transform.position = new Vector2(random.Next(-320, 220) / 10.0f, 5.0f);
     }
 
     // Update is called once per frame
@@ -57,9 +64,19 @@ public class Soldier : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision2D)
     {
-        if (collision2D.gameObject.name == "TilemapGround")
+        if (ReferenceEquals(collision2D.gameObject, ground))
         {
             grounded = true;
+        }
+
+        
+    }
+
+    void OnTriggerEnter2D(Collider2D collision2D)
+    {
+        if (ReferenceEquals(collision2D.gameObject, attackCollider))
+        {
+            rb.AddForce(new Vector2(playerRemastered.attackDirection * playerRemastered.attackStrength, 0.0f), ForceMode2D.Impulse);
         }
     }
 

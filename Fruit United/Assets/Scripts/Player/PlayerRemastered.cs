@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerRemastered : MonoBehaviour
 {
@@ -17,7 +18,6 @@ public class PlayerRemastered : MonoBehaviour
     // Jumping
     public float jumpImpulse;
 
-
     // Running
     public float maxSpeedX;
     public float accelX;
@@ -25,9 +25,15 @@ public class PlayerRemastered : MonoBehaviour
     // Attacking
     private int attackIndex;
     private System.Diagnostics.Stopwatch attackStopwatch;
+    public GameObject attackCollider;
+    private Vector3 attackColliderOffset;
+    public int attackTimeout;
+    public int attackStartTime;
+    public int attackEndTime;
+    [HideInInspector] public float attackDirection;
+    public float attackStrength;
 
-    private bool pressingHorizontal;
-    private bool pressingVertical;
+    private bool lastMovedToRight;
 
     void Start()
     {
@@ -35,6 +41,7 @@ public class PlayerRemastered : MonoBehaviour
         attackIndex = 0;
         attackStopwatch = new System.Diagnostics.Stopwatch();
         attackStopwatch.Restart();
+        attackColliderOffset = attackCollider.transform.position - transform.position;
     }
 
     void FixedUpdate()
@@ -47,8 +54,10 @@ public class PlayerRemastered : MonoBehaviour
         Vector2 moveValue = InputSystem.actions.FindAction("Move").ReadValue<Vector2>();
         moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Mathf.Abs(moveValue.x);
         moveValue.y = moveValue.y == 0.0f ? 0.0f : moveValue.y / Mathf.Abs(moveValue.y);
-        pressingHorizontal = moveValue.x > 0.0f;
-        pressingVertical = moveValue.y > 0.0f;
+        if (Mathf.Abs(moveValue.x) > Mathf.Epsilon)
+        {
+            lastMovedToRight = moveValue.x > 0.0f;
+        }
 
         // Jumping
         if (moveValue.y == 1.0f && grounded && previousGround)
@@ -65,11 +74,19 @@ public class PlayerRemastered : MonoBehaviour
         {
             rb.AddForce(new Vector2(moveValue.x * accelX, 0.0f), ForceMode2D.Force);
         }
-        spriteRenderer.flipX = moveValue.x < 0.0f;
+        spriteRenderer.flipX = !lastMovedToRight;
         animator.SetInteger("AnimState", speedX > Mathf.Epsilon ? 1 : 0);
 
         // Attacking
-        if (Input.GetKeyDown(KeyCode.Space) && attackStopwatch.ElapsedMilliseconds > 250)
+        long attackTime = attackStopwatch.ElapsedMilliseconds;
+
+        attackCollider.SetActive(attackTime > attackStartTime && attackTime < attackEndTime);
+        attackCollider.transform.localPosition = new Vector3(attackColliderOffset.x * attackDirection, attackColliderOffset.y, attackColliderOffset.z);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && attackStopwatch.ElapsedMilliseconds > attackTimeout)
         {
             attackIndex = (attackIndex + 1) % 3;
             if (attackStopwatch.ElapsedMilliseconds > 1000)
@@ -79,7 +96,10 @@ public class PlayerRemastered : MonoBehaviour
 
             animator.SetTrigger("Attack" + (attackIndex + 1));
 
+            attackDirection = lastMovedToRight ? 1.0f : -1.0f;
+
             attackStopwatch.Restart();
         }
+        Debug.Log(attackStopwatch.ElapsedMilliseconds);
     }
 }
