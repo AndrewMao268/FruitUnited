@@ -35,6 +35,9 @@ public class PlayerRemastered : MonoBehaviour
 
     private bool lastMovedToRight;
 
+    //inventory system
+    public GameObject inventory;
+
     void Start()
     {
         // Attacking
@@ -42,6 +45,9 @@ public class PlayerRemastered : MonoBehaviour
         attackStopwatch = new System.Diagnostics.Stopwatch();
         attackStopwatch.Restart();
         attackColliderOffset = attackCollider.transform.position - transform.position;
+
+        //inventory shows on screen when player says so, so starts as false
+        inventory.SetActive(false);
     }
 
     void FixedUpdate()
@@ -101,5 +107,12 @@ public class PlayerRemastered : MonoBehaviour
             attackStopwatch.Restart();
         }
         Debug.Log(attackStopwatch.ElapsedMilliseconds);
+
+        //Inventory activation by player
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            // Toggle the active state of the inventory panel
+            inventory.SetActive(!inventory.activeSelf);
+        }
     }
 }
