@@ -5,10 +5,19 @@ using UnityEngine.Tilemaps;
 public class Soldier : MonoBehaviour
 {
     Rigidbody2D rb;
+    System.Random random;
 
     // Grounding
+    public Transform feetTransform;
+    public Vector2 feetSize;
+    public LayerMask groundMask;
     bool grounded;
     public Tilemap ground;
+
+    // Attacking
+    public float attackStrength;
+    [HideInInspector] public float attackDirection;
+    public GameObject playerHitCollider;
 
     // Getting attacked
     public GameObject attackCollider;
@@ -17,8 +26,11 @@ public class Soldier : MonoBehaviour
     // AI
     public GameObject player;
     
-    public float jumpHeight = 4.0f;
-    public float xSpeed = 7.0f;
+    public float jumpHeight;
+    public float maxSpeedX;
+    public float accelX;
+
+    private bool lastMovedToRight;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,17 +38,14 @@ public class Soldier : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         grounded = false;
 
-        System.Random random = new System.Random();
+        random = new System.Random();
         transform.position = new Vector2(random.Next(-320, 220) / 10.0f, 5.0f);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-
-        if (player.transform.position.y < -20.0f) {
-            player.transform.position = new Vector2(0.0f, 4.0f);
-        }
+        grounded = Physics2D.OverlapCapsule(feetTransform.position, new Vector2(feetSize.x, feetSize.y), CapsuleDirection2D.Horizontal, 0.0f, groundMask);
 
         // Soldier AI
         float moveX = player.transform.position.x - transform.position.x;
@@ -45,46 +54,53 @@ public class Soldier : MonoBehaviour
         Vector2 moveValue = new Vector2(moveX, moveY);
         moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Math.Abs(moveValue.x);
         moveValue.y = moveValue.y == 0.0f ? 0.0f : moveValue.y / Math.Abs(moveValue.y);
+        if (Mathf.Abs(moveValue.x) > Mathf.Epsilon)
+        {
+            lastMovedToRight = moveValue.x > 0.0f;
+        }
 
+        // Jumping
         if (moveValue.y > 0.0f && grounded)
         {
             rb.AddForce(new Vector2(0.0f, jumpHeight), ForceMode2D.Impulse);
-            return;
         }
 
-        rb.AddForce(new Vector2(moveValue.x * xSpeed, 0.0f), ForceMode2D.Force);
+        // Running
+        float speedX = Mathf.Abs(rb.linearVelocityX);
+        if (speedX < maxSpeedX || Mathf.Sign(moveValue.x) != Mathf.Sign(rb.linearVelocityX))
+        {
+            rb.AddForce(new Vector2(moveValue.x * accelX, 0.0f), ForceMode2D.Force);
+        }
 
-        transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0.0f);
+        // Attacking
+        attackDirection = lastMovedToRight ? 1.0f : -1.0f;
 
+        // Respawning
         if (transform.position.y < -20.0f)
         {
-            transform.position = new Vector3(0.0f, 20.0f, 0.0f);
+            transform.position = new Vector2(0.0f, 5.0f);
         }
-    }
-
-    void OnCollisionEnter2D(Collision2D collision2D)
-    {
-        if (ReferenceEquals(collision2D.gameObject, ground))
-        {
-            grounded = true;
-        }
-
-        
     }
 
     void OnTriggerEnter2D(Collider2D collision2D)
     {
         if (ReferenceEquals(collision2D.gameObject, attackCollider))
         {
-            rb.AddForce(new Vector2(playerRemastered.attackDirection * playerRemastered.attackStrength, 0.0f), ForceMode2D.Impulse);
+            float impulseX = playerRemastered.attackDirection * playerRemastered.attackStrength;
+            float impulseY = (float)random.NextDouble() * playerRemastered.attackStrength;
+            rb.AddForce(new Vector2(impulseX, impulseY), ForceMode2D.Impulse);
+        }
+
+        if (ReferenceEquals(collision2D.gameObject, playerHitCollider))
+        {
+            float impulseX = attackDirection * attackStrength;
+            float impulseY = (float)random.NextDouble() * attackStrength;
+            playerRemastered.rb.AddForce(new Vector2(impulseX, impulseY), ForceMode2D.Impulse);
         }
     }
 
-    void OnCollisionExit2D(Collision2D collision2D)
+    void OnCollisionEnter2D(Collision2D collision2D)
     {
-        if (collision2D.gameObject.name == "TilemapGround")
-        {
-            grounded = false;
-        }
+        
     }
 }

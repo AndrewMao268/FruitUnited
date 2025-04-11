@@ -15,6 +15,8 @@ public class PlayerRemastered : MonoBehaviour
     public Vector2 feetSize;
     public LayerMask groundLayer;
 
+    private Vector2 moveValue;
+
     // Jumping
     public float jumpImpulse;
 
@@ -51,7 +53,7 @@ public class PlayerRemastered : MonoBehaviour
         grounded = Physics2D.OverlapCapsule(feet.position, new Vector2(feetSize.x, feetSize.y), CapsuleDirection2D.Horizontal, 0, groundLayer);
         animator.SetBool("Grounded", grounded);
 
-        Vector2 moveValue = InputSystem.actions.FindAction("Move").ReadValue<Vector2>();
+        
         moveValue.x = moveValue.x == 0.0f ? 0.0f : moveValue.x / Mathf.Abs(moveValue.x);
         moveValue.y = moveValue.y == 0.0f ? 0.0f : moveValue.y / Mathf.Abs(moveValue.y);
         if (Mathf.Abs(moveValue.x) > Mathf.Epsilon)
@@ -64,13 +66,12 @@ public class PlayerRemastered : MonoBehaviour
         {
             rb.AddForce(new Vector2(0, jumpImpulse), ForceMode2D.Impulse);
             animator.SetTrigger("Jump");
-            return;
         }
         animator.SetFloat("AirSpeedY", rb.linearVelocity.y);
 
         // Running
         float speedX = Mathf.Abs(rb.linearVelocityX);
-        if (speedX < maxSpeedX)
+        if (speedX < maxSpeedX || Mathf.Sign(moveValue.x) != Mathf.Sign(rb.linearVelocityX))
         {
             rb.AddForce(new Vector2(moveValue.x * accelX, 0.0f), ForceMode2D.Force);
         }
@@ -82,10 +83,18 @@ public class PlayerRemastered : MonoBehaviour
 
         attackCollider.SetActive(attackTime > attackStartTime && attackTime < attackEndTime);
         attackCollider.transform.localPosition = new Vector3(attackColliderOffset.x * attackDirection, attackColliderOffset.y, attackColliderOffset.z);
+
+        // Respawning
+        if (transform.position.y < -20.0f)
+        {
+            transform.position = new Vector3(0.0f, 5.0f);
+        }
     }
 
     void Update()
     {
+        moveValue = InputSystem.actions.FindAction("Move").ReadValue<Vector2>();
+
         if (Input.GetKeyDown(KeyCode.Space) && attackStopwatch.ElapsedMilliseconds > attackTimeout)
         {
             attackIndex = (attackIndex + 1) % 3;
@@ -100,6 +109,5 @@ public class PlayerRemastered : MonoBehaviour
 
             attackStopwatch.Restart();
         }
-        Debug.Log(attackStopwatch.ElapsedMilliseconds);
     }
 }
