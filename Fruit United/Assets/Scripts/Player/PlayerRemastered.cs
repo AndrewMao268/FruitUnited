@@ -70,6 +70,20 @@ public class PlayerRemastered : MonoBehaviour
         spriteRenderer.flipX = moveValue.x < 0.0f;
         animator.SetInteger("AnimState", speedX > Mathf.Epsilon ? 1 : 0);
 
+        //ChatGPT told me to fix movement (next section) so the feet are not moving when it looks like the character is going nowwhere - Brandon
+        if (speedX > 2.0f)
+        {
+            animator.SetInteger("AnimState",1 ); // Walking state
+        }
+        else
+        {
+            animator.SetInteger("AnimState", 0); // Idle state
+            if (moveValue.x == 0)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.9f, rb.linearVelocity.y); // or even 0 to stop instantly
+            }
+        }
+
         // Player facing direction fix
         float inputDirection = Input.GetAxisRaw("Horizontal");
         if (inputDirection < 0)
