@@ -7,7 +7,11 @@ public class CameraMan : MonoBehaviour
     public Camera camera;
 
     public GameObject followObject;
-    public float speed = 0.01f;
+    public float translationSpeed = 1.0f;
+    public float translationThreshold = 0.01f;
+    public float heightSpeed = 1.0f;
+    public float heightThreshold = 0.01f;
+    public float minOrthographicSize = 5.0f;
     public float yOffset;
 
     public GameObject player;
@@ -18,6 +22,9 @@ public class CameraMan : MonoBehaviour
     public List<GameObject> soldiers;
 
     [HideInInspector] public float initialX;
+
+    private float velocityX = 0.0f;
+    private float velocityY = 0.0f;
 
     void Start()
     {
@@ -36,9 +43,9 @@ public class CameraMan : MonoBehaviour
 
     void Update()
     {
-        //float followX = followObject.transform.position.x;
-        //float followY = followObject.transform.position.y + yOffset;
-        //transform.position = new Vector3(followX, followY, -10.0f);
+        float followX = followObject.transform.position.x;
+        float followY = followObject.transform.position.y + yOffset;
+        transform.position = new Vector3(followX, followY, -10.0f);
 
         float minX = player.transform.position.x;
         float maxX = player.transform.position.x;
@@ -81,9 +88,10 @@ public class CameraMan : MonoBehaviour
         minY = minYObj.GetComponent<SpriteRenderer>().bounds.min.y;
         maxY = maxYObj.GetComponent<SpriteRenderer>().bounds.max.y;
 
-        float width = maxX - minX;
-        float height = maxY - minY;
+        float width = Mathf.Max(maxX - minX, 2 * Mathf.Abs(maxX - followX), 2 * Mathf.Abs(followX - minX));
+        float height = Mathf.Max(maxY - minY, 2 * Mathf.Abs(maxY - followY), 2 * Mathf.Abs(followY - minY));
         float neededAspect = width / height;
+
         float actualAspect = Screen.width / Screen.height;
 
         float orthographicSize = height * 0.5f;
@@ -96,11 +104,48 @@ public class CameraMan : MonoBehaviour
             orthographicSize = width * (1.0f / actualAspect) * 0.5f;
         }
 
-        camera.orthographicSize = orthographicSize;
+        // camera.orthographicSize = Mathf.Max(orthographicSize, minOrthographicSize);
         // camera.orthographicSize = 10.0f;
 
-        float posX = (minX + maxX) * 0.5f;
-        float posY = (minY + maxY) * 0.5f;
-        transform.position = new Vector3(posX, posY, -10.0f);
+        float targetOrthoSize = Mathf.Max(orthographicSize, minOrthographicSize);
+
+        float deltaOrtho = targetOrthoSize - camera.orthographicSize;
+        float velocityOrtho = Mathf.Sign(deltaOrtho) * Mathf.Abs(deltaOrtho) * heightSpeed;
+
+        if (Mathf.Abs(velocityOrtho) < heightThreshold)
+        {
+            velocityOrtho = 0.0f;
+        }
+
+        camera.orthographicSize += velocityOrtho;
+
+        float targetX = (minX + maxX) * 0.5f;
+        float targetY = (minY + maxY) * 0.5f;
+
+        float deltaX = targetX - transform.position.x;
+        float deltaY = targetY - transform.position.y;
+
+        float angle = Mathf.Atan2(deltaY, deltaX);
+
+        velocityX = Mathf.Cos(angle) * Mathf.Abs(deltaX) * translationSpeed;
+        velocityY = Mathf.Sin(angle) * Mathf.Abs(deltaY) * translationSpeed;
+
+        if (Mathf.Abs(velocityX) < translationThreshold)
+        {
+            velocityX = 0.0f;
+        }
+        if (Mathf.Abs(velocityY) < translationThreshold)
+        {
+            velocityY = 0.0f;
+        }
+
+        float newPosX = transform.position.x + velocityX;
+        float newPosY = transform.position.y + velocityY;
+
+        // transform.position = new Vector3(newPosX, newPosY, -10.0f);
+
+        //Debug.Log("velocityX: " + velocityX);
+        //Debug.Log("velocityY: " + velocityY);
+        //Debug.Log("velocityOrtho: " + velocityOrtho);
     }
 }

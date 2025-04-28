@@ -43935,7 +43935,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 2008563269}
   followObject: {fileID: 1989154597}
-  speed: 0.01
+  translationSpeed: 0.2
+  translationThreshold: 0
+  heightSpeed: 0.1
+  heightThreshold: 0
+  minOrthographicSize: 5
   yOffset: 2
   player: {fileID: 1989154597}
   soldiersFolder: {fileID: 1349958714}
