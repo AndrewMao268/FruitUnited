@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: c6f0178ee20fc834da2564740d24d58b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 104130
+  packageName: Bandits - Pixel Art
+  packageVersion: 2.2
+  assetPath: Assets/Bandits - Pixel Art/Demo/Sensor_Bandit.cs
+  uploadId: 384983

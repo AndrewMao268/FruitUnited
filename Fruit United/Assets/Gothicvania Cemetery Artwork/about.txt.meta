@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 9c580de92cdecc246b9126839f0c8ed6
+timeCreated: 1528583115
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 120509
+  packageName: GothicVania Cemetery
+  packageVersion: 1.0
+  assetPath: Assets/Gothicvania Cemetery Artwork/about.txt
+  uploadId: 250459
